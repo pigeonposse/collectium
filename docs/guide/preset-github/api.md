@@ -5,7 +5,7 @@
 ### setGithubPreset()
 
 ```ts
-function setGithubPreset(data: Pick<GitHubOpts$1, 
+function setGithubPreset(data: Pick<GitHubOpts$1,
   | "user"
   | "branch"
   | "token"

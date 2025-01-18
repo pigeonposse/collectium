@@ -193,7 +193,7 @@ jobs:
     #   - name: Release binaries
     #     uses: ncipollo/release-action@v1
     #     if: steps.updated.outputs.core_version != ''
-    #     with: 
+    #     with:
     #       tag: "${{ steps.updated.outputs.core_version }}"
     #       draft: false
     #       prerelease: false
