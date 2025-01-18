@@ -1,0 +1,49 @@
+{
+	"name": "@collectium/preset-github",
+	"version": "0.0.0",
+	"description": "Github Preset for Collectium",
+	"keywords": [
+		"pp",
+		"pigeonposse",
+		"collectium",
+		"preset"
+	],
+	"homepage": "https://collectium.pigeonposse.com/guide/preset-github",
+	"bugs": {
+		"url": "https://github.com/pigeonposse/collectium/issues",
+		"email": "dev@pigeonposse.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/pigeonposse/collectium",
+		"directory": "packages/preset-github"
+	},
+	"funding": {
+		"type": "individual",
+		"url": "https://pigeonposse.com/?popup=donate"
+	},
+	"license": "GPL-3.0",
+	"author": {
+		"name": "Angelo",
+		"email": "angelo@pigeonposse.com",
+		"url": "https://github.com/angelespejo"
+	},
+	"type": "module",
+	"main": "./dist/main.mjs",
+	"module": "./dist/main.mjs",
+	"types": "./dist/main.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "unbuild",
+		"dev": "tsx examples/main.ts"
+	},
+	"peerDependencies": {
+		"@collectium/core": "workspace:*"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	}
+}
