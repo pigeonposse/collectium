@@ -39,6 +39,7 @@
 		"build": "vite build",
 		"dev": "vite dev",
 		"dev-server": "tsx examples/server.ts",
+		"test": "pnpm test:unit && pnpm test:e2e",
 		"test:e2e": "playwright test",
 		"test:unit": "vitest run src --passWithNoTests"
 	},
