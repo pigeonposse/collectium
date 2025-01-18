@@ -39,6 +39,7 @@
 		".": "dovenv",
 		"build": "pnpm + core build && pnpm + api build && pnpm + 'preset*' build",
 		"build-assets": "dovenv docs generate-assets --flag=\"--preset minimal\" --flag=\"docs/public/logo.png\"",
+		"build-docs": "dovenv predocs && dovenv docs build",
 		"prepare": "dovenv git husky --silent",
 		"test": "pnpm run --sequential \"/test:.*/\"",
 		"test:pkgs": "pnpm -F '*' run check && pnpm -F '*' run test",

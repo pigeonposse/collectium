@@ -12,7 +12,7 @@ env:
     GITHUB_TOKEN: ${{ github.token }}
     DOCS_ID: 'collectium'
     DOCS_DIR: 'build/docs'
-    BUILD_CMD: 'pnpm build'
+    BUILD_CMD: 'pnpm build && pnpm build-docs'
 
 ###############################################################################
 # JOBS

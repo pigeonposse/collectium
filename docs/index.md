@@ -5,7 +5,7 @@ layout: home
 hero:
   name: COLLECTIUM
   tagline: Collect information from GitHub and other URLs
-  text: Create a Rest API based on your repositories quickly
+  text: Create a Rest API based on your repositories
   image:
     src: /logo.png
     alt: collectium
