@@ -26,7 +26,7 @@ deno add @collectium/preset-github
 
 :::
 
-## More
+## ➕ More
 
 - 📖 [API Docs](api.md)
 - 📦 [NPM](https://www.npmjs.com/package/@collectium/preset-github)

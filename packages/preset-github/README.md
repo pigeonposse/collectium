@@ -16,11 +16,11 @@ Github Preset for Collectium
 ## Table of contents
 
 - [🔑 Installation](#-installation)
-- [More](#more)
+- [➕ More](#-more)
 - [👨‍💻 Development](#-development)
-- [☕ Donate](#-donate)
+- [❤️ Donate](#-donate)
 - [📜 License](#-license)
-- [🐦 About us](#-about-us)
+- [✨ About us](#-about-us)
 
 
 
@@ -39,10 +39,10 @@ bun add @collectium/preset-github
 deno add @collectium/preset-github
 ```
 
-## More
+## ➕ More
 
-- [Core](https://collectium.pigeonposse.com/guide/core)
-- [Api](https://collectium.pigeonposse.com/guide/api)
+- 🌞 [Core](https://collectium.pigeonposse.com/guide/core)
+- 📖 [Api](https://collectium.pigeonposse.com/guide/api)
 - [Preset-github](https://collectium.pigeonposse.com/guide/preset-github)
 
 
@@ -50,13 +50,13 @@ deno add @collectium/preset-github
 
 ## 👨‍💻 Development
 
-__collectium__ is an open-source project and its development is open to anyone who wants to participate.
+__Collectium__ is an open-source project and its development is open to anyone who wants to participate.
 
 [![Issues](https://img.shields.io/badge/Issues-grey?style=for-the-badge)](https://github.com/pigeonposse/collectium/issues)
-[![Pull requests](https://img.shields.io/badge/Pulls-grey?style=for-the-badge)](https://github.com/pigeonposse/collectium/pulls)
-[![Read more](https://img.shields.io/badge/Read%20more-grey?style=for-the-badge)](https://collectium.pigeonposse.com/)
+[![Pull requests](https://img.shields.io/badge/Pulls-grey?style=for-the-badge)]({{const.pkg.repository.url}}/pulls)
+[![Read more](https://img.shields.io/badge/Read%20more-grey?style=for-the-badge)]({{const.pkg.homepage}})
 
-## ☕ Donate
+## ❤️ Donate
 
 Help us to develop more interesting things.
 
@@ -68,13 +68,15 @@ This software is licensed with __[GPL-3.0](https://github.com/pigeonposse/collec
 
 [![Read more](https://img.shields.io/badge/Read-more-grey?style=for-the-badge)](https://github.com/pigeonposse/collectium/blob/main/LICENSE)
 
-## 🐦 About us
+## ✨ About us
 
-*PigeonPosse* is a ✨ __code development collective__ ✨ focused on creating practical and interesting tools that help developers and users enjoy a more agile and comfortable experience. Our projects cover various programming sectors and we do not have a thematic limitation in terms of projects.
+*PigeonPosse* is a __code development collective__ focused on creating practical and interesting tools that help developers and users enjoy a more agile and comfortable experience. Our projects cover various programming sectors and we do not have a thematic limitation in terms of projects.
 
 [![More](https://img.shields.io/badge/Read-more-grey?style=for-the-badge)](https://github.com/pigeonposse)
 
 ---
+
+
 
 [![About Us](https://img.shields.io/badge/About%20Us-grey?style=for-the-badge&logoColor=white)](https://pigeonposse.com?popup=about)
 [![Donate](https://img.shields.io/badge/Donate-pink?style=for-the-badge&logoColor=white)](https://pigeonposse.com/?popup=donate)

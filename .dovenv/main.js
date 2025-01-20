@@ -1,21 +1,16 @@
 import { defineConfig } from '@dovenv/core'
 import {
+	getSidebar,
 	getWorkspaceConfig,
 	pigeonposseMonorepoTheme,
 	Predocs,
 } from '@dovenv/theme-pigeonposse'
 
 const core = await getWorkspaceConfig( {
-	metaURL  : import.meta.url,
-	path     : '../',
-	packages : {
-		metaURL : import.meta.url,
-		path    : '../packages',
-	},
-	core : {
-		metaURL : import.meta.url,
-		path    : '../packages/core',
-	},
+	metaURL      : import.meta.url,
+	path         : '../',
+	packagesPath : './packages',
+	corePath     : './packages/core',
 } )
 const ICON = {
 	LIB      : '📚',
@@ -31,13 +26,24 @@ export default defineConfig(
 	pigeonposseMonorepoTheme( {
 		core,
 		lint : { staged: { '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json}': 'dovenv lint eslint --fix' } },
-		docs : async () => {
+		docs : async config => {
+
+			const sidebar = await getSidebar( config )
 
 			return {
 				vitepress : {
 					ignoreDeadLinks : true,
 					themeConfig     : { outline: { level: [ 2, 3 ] } },
 					// vite            : { build: { chunkSizeWarningLimit: 1000 } },
+				},
+				sidebar : {
+					'/guide/'       : sidebar,
+					'/todo/'        : sidebar,
+					'/contributors' : sidebar,
+				},
+				autoSidebar : {
+					intro     : false,
+					reference : false,
 				},
 				version : core.corePkg.version,
 				pwa     : { manifest : { icons : [

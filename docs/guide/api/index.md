@@ -26,7 +26,7 @@ deno add @collectium/api
 
 :::
 
-## More
+## ➕ More
 
 - 📖 [API Docs](api.md)
 - 📦 [NPM](https://www.npmjs.com/package/@collectium/api)
