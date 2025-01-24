@@ -48,7 +48,7 @@
 	},
 	"devDependencies": {
 		"@backan/server": "0.2.0",
-		"@hono/vite-dev-server": "0.18.0"
+		"@hono/vite-dev-server": "0.18.1"
 	},
 	"peerDependencies": {
 		"@collectium/core": "workspace:*"

@@ -25,7 +25,7 @@ const ICON = {
 export default defineConfig(
 	pigeonposseMonorepoTheme( {
 		core,
-		lint : { staged: { '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json}': 'dovenv lint eslint --fix' } },
+		// lint : { staged: { '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json}': 'dovenv lint eslint --fix' } },
 		docs : async config => {
 
 			const sidebar = await getSidebar( config )
