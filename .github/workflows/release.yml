@@ -82,7 +82,7 @@ jobs:
            pnpm install --no-frozen-lockfile --ignore-scripts
 
       - name: ⬇️🌐 Install Playwright Browsers
-        run: pnpx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
 
       #########################################################################
       # BUILD
