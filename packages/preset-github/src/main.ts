@@ -2,7 +2,6 @@
 import type { CollectiumOpts } from '@collectium/core'
 
 export const setGithubPreset = <ID extends string = string>(
-
 	data: Pick<NonNullable<CollectiumOpts['github']>[number], 'user' | 'branch' | 'token' | 'userType' | 'repos' > & {
 		/**
 		 * key ID of the reponse
@@ -32,9 +31,16 @@ export const setGithubPreset = <ID extends string = string>(
 			...data,
 			...{ content : {
 				'config' : {
-					input : ( data.configPath
-						? data.configPath
-						: [ '.' + id ] ).flatMap( p => [ `${p}.yml`, `${p}.yaml` ] ),
+					input : Array.from( new Set(
+						( data.configPath
+							? data.configPath
+							: [ '.' + id ]
+						)
+							.map( p => p.replace( '.yml', '' ).replace( '.yaml', '' ) )
+							.flatMap(
+								p => [ `${p}.yml`, `${p}.yaml` ],
+							),
+					) ),
 					schema : z => z.object( { web : z.record(
 						z.string(),
 						z.object( {
@@ -97,7 +103,7 @@ export const setGithubPreset = <ID extends string = string>(
 							logo     : z.string().url().optional(),
 							banner   : z.string().url().optional(),
 						} ),
-					) } ),
+					) } ).optional(),
 				},
 				'package' : {
 					input  : 'package.json',

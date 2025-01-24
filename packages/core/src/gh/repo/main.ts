@@ -85,7 +85,8 @@ export class GitHubRepo extends GitHubSuper {
 			else return d.schema?.( this.z ) || fileContentRes( this.z )
 
 		} )
-		this.schema     = schema( this.z, this.z.object( getSchema ) )
+
+		this.schema = schema( this.z, this.z.object( getSchema ) )
 
 	}
 

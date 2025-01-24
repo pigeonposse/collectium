@@ -6,9 +6,9 @@ web:
       Collect information from GitHub and other URLs in a completely customized
       way
     homepage: https://collectium.pigeonposse.com/
-    type: library
-    subtype:
+    type:
       - api
+      - library
     repo: https://github.com/pigeonposse/collectium
     license: https://github.com/pigeonposse/collectium/blob/main/LICENSE
     status: active
