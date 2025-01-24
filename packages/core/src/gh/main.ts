@@ -6,7 +6,9 @@ import { GitHubUser }      from './user/main'
 import type { z }                             from '../_shared/validate'
 import type { GitHubOpts as GitHubOptsValue } from './_super/types'
 
-export type GitHubOpts = { [key in string]: GitHubOptsValue }
+export type GitHubOpts = {
+	[key in string]: GitHubOptsValue
+}
 
 export class GitHub extends CollectiumSuper<GitHubOpts, string> {
 
@@ -90,8 +92,8 @@ export class GitHub extends CollectiumSuper<GitHubOpts, string> {
 				return [
 					key,
 					{
-						repo : await part.repo.get(),
 						user : await part.user.get(),
+						repo : await part.repo.get(),
 					},
 				]
 

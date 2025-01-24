@@ -11,6 +11,7 @@ const collectium = new Collectium( githubPreset( {
 	userType   : 'org',
 	token,
 	configPath : [ '.pigeonposse' ],
+	repos      : [ 'collectium' ],
 } ) )
 
 const data = await collectium.get()

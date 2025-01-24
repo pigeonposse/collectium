@@ -1,4 +1,7 @@
 
+import { matcher } from 'matcher'
+
+import { objectMap }   from '../../_shared/obj'
 import { getContent }  from '../../_shared/string'
 import { GitHubSuper } from '../_super/main'
 
@@ -23,6 +26,7 @@ const schema = ( z: Zod, customConf?: ZodAnyType ) => ( {
 		isDisabled : z.boolean(),
 		isFork     : z.boolean(),
 		isTemplate : z.boolean(),
+		isPinned   : z.boolean(),
 
 		stargazers : z.number(),
 		watchers   : z.number(),
@@ -41,10 +45,7 @@ const schema = ( z: Zod, customConf?: ZodAnyType ) => ( {
 			url  : z.string().optional(),
 		} ).optional(),
 
-		content : z.object( {
-			config : customConf || fileContentRes( z ),
-			files  : z.record( z.string(), fileContentRes( z ) ),
-		} ),
+		content  : customConf || z.record( z.string(), fileContentRes( z ) ).optional(),
 		releases : z.array( z.object( {
 			url         : z.string(),
 			tag         : z.string(),
@@ -59,8 +60,8 @@ const schema = ( z: Zod, customConf?: ZodAnyType ) => ( {
 				downloads   : z.number(),
 				createdAt   : z.string(),
 				updatedAt   : z.string(),
-			} ) ),
-		} ) ),
+			} ) ).optional(),
+		} ) ).optional(),
 	} ) ),
 	fileContentRes : fileContentRes( z ),
 } )
@@ -77,13 +78,64 @@ export class GitHubRepo extends GitHubSuper {
 	constructor( opts: GitHubOpts, config?: GitHubRepo['config'] ) {
 
 		super( opts, config )
-		this.schema = schema( this.z, opts.configSchema?.( this.z ) )
+
+		const getSchema = objectMap( this.opts.content, d => {
+
+			if ( typeof d === 'string' || Array.isArray( d ) ) return fileContentRes( this.z )
+			else return d.schema?.( this.z ) || fileContentRes( this.z )
+
+		} )
+		this.schema     = schema( this.z, this.z.object( getSchema ) )
+
+	}
+
+	async getPinnedRepos() {
+
+		try {
+
+			const type     = this.opts.userType === 'org' ? 'organization' : 'user'
+			const response = await this.gh.graphql(
+				`query ($login: String!) {
+				${type}(login: $login) {
+				  pinnedItems(first: 6, types: REPOSITORY) {
+				    nodes {
+					  ... on Repository {
+					    name
+					  }
+				    }
+				  }
+				}
+			  }`,
+				{
+					login   : this.opts.user,
+					headers : this.opts.requestHeaders,
+				},
+			) as {
+				[key in typeof type]: { pinnedItems: { nodes: { name: string }[] } }
+			} | undefined
+
+			const pinnedItems = response && typeof response === 'object' && type in response && typeof response[type] === 'object' && 'pinnedItems' in response[type]
+				? response?.[type].pinnedItems
+				: undefined
+			const nodes       = pinnedItems?.nodes || undefined
+			const pinnedRepos = nodes?.map( d => d.name )
+
+			return pinnedRepos
+
+		}
+		catch ( e ) {
+
+			console.warn( 'Error fetching pinned repositories:', e )
+			return undefined
+
+		}
 
 	}
 
 	async getReleases( repo: string ): Promise<RepoReleases> {
 
 		// https://api.github.com/repos/pigeonposse/bepp/releases
+		if ( !this.opts.releases ) return
 
 		const response = await this.gh.request( 'GET /repos/{owner}/{repo}/releases', {
 			owner   : this.opts.user,
@@ -97,15 +149,17 @@ export class GitHubRepo extends GitHubSuper {
 			name        : d.name || String( d.id ),
 			createdAt   : d.created_at,
 			publishedAt : d.published_at || d.created_at,
-			assets      : d.assets.map( a => ( {
-				name        : a.name,
-				id          : a.id,
-				size        : a.size,
-				downloadURL : a.browser_download_url,
-				downloads   : a.download_count,
-				createdAt   : a.created_at,
-				updatedAt   : a.updated_at,
-			} ) ),
+			assets      : this.opts.releases === 'no-assets'
+				? undefined
+				: d.assets.map( a => ( {
+					name        : a.name,
+					id          : a.id,
+					size        : a.size,
+					downloadURL : a.browser_download_url,
+					downloads   : a.download_count,
+					createdAt   : a.created_at,
+					updatedAt   : a.updated_at,
+				} ) ),
 		} ) )
 
 	}
@@ -126,68 +180,48 @@ export class GitHubRepo extends GitHubSuper {
 
 	async getContent( repo: string ): Promise<RepoContentRes> {
 
-		const res : RepoContentRes = {
-			config : undefined,
-			files  : {},
-		}
+		const res : RepoContentRes = {}
 
 		try {
 
-			const readeadFiles = this.opts.files
+			const readeadFiles = this.opts.content
 
-			if ( readeadFiles ) {
+			if ( !readeadFiles ) return undefined
 
-				for ( const key of Object.keys( readeadFiles ) ) {
+			for ( const key of Object.keys( readeadFiles ) ) {
 
-					const file   = readeadFiles[key]
-					const isObj  = typeof file !== 'string'
-					const path   = !isObj ? file : file.input
-					const schema = isObj ? await file.schema?.( this.z ) : undefined
-					let content  = await this.geFileContent( repo, path )
+				const file   = readeadFiles[key]
+				const isObj  = typeof file !== 'string' && !Array.isArray( file )
+				const input  = !isObj ? file : file.input
+				const paths  = typeof input === 'string' ? [ input ] : input
+				const schema = isObj ? await file.schema?.( this.z ) : undefined
 
-					const resOn = await this.opts?.onFile?.( {
-						user     : this.opts.user,
-						isConfig : false,
-						branch   : this.opts.branch,
-						repo,
-						path     : path,
-						id       : key,
+				for ( const path in paths ) {
+
+					if ( res[key] ) continue
+
+					let content = await this.geFileContent( repo, path )
+
+					const resOn = await this.opts?.hook?.after?.( {
+						opts : this.opts,
+						path : path,
+						id   : key,
 						content,
 					} )
 					content     = resOn ? resOn : content
 
 					if ( schema ) await this.validateSchema( schema, content )
-					res.files[key] = content
+					res[key] = content
 
 				}
 
 			}
 
-			for ( const file of this.opts.configPath ) {
-
-				let content  = await this.geFileContent( repo, file )
-				const schema = await this.opts.configSchema( this.z )
-
-				if ( !content ) continue
-
-				const resOn = await this.opts?.onFile?.( {
-					user     : this.opts.user,
-					isConfig : true,
-					branch   : this.opts.branch,
-					repo,
-					path     : file,
-					id       : file,
-					content,
-				} )
-				content     = resOn ? resOn : content
-				if ( schema ) await this.validateSchema( schema, content )
-				res.config = content
-
-				return res
-
-			}
-
-			return res
+			const resHooked = await this.opts?.hook?.afterAll?.( {
+				content : res,
+				opts    : this.opts,
+			} )
+			return resHooked || res
 
 		}
 		catch ( e ) {
@@ -210,14 +244,19 @@ export class GitHubRepo extends GitHubSuper {
 
 		try {
 
+			const pinnedRepos = await this.getPinnedRepos() || []
+
 			const response = await this.gh.request( 'GET /users/{username}/repos', {
 				username : this.opts.user,
 				headers  : this.opts.requestHeaders,
 			} )
 
+			const repoIDs    = response.data.map( d => d.name )
+			const reposMatch = matcher( repoIDs, this.opts.repos )
+
 			const repos = await Promise.all( response.data.map( async repo => {
 
-				if ( this.opts.ignoreRepo && this.opts.ignoreRepo.includes( repo.name ) ) return undefined
+				if ( !reposMatch.includes( repo.name ) ) return undefined
 
 				return {
 					id       : repo.name,
@@ -230,6 +269,7 @@ export class GitHubRepo extends GitHubSuper {
 					isArchived : repo.archived || false,
 					isDisabled : repo.disabled || false,
 					isPrivate  : repo.private || false,
+					isPinned   : pinnedRepos?.includes( repo.name ),
 
 					size       : repo.size,
 					issues     : repo.open_issues_count || 0,

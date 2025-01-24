@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 // import { z } from 'zod'
 
+import { getContent }  from '../../_shared/string'
 import { validateURL } from '../../_shared/validate'
 import { GitHubSuper } from '../_super/main'
 
@@ -20,7 +21,20 @@ export class GitHubUser extends GitHubSuper {
 		email       : this.z.string().optional(),
 		name        : this.z.string().optional(),
 		description : this.z.string().optional(),
-		teams       : this.z.array( this.z.object( {
+		social      : this.z.array( this.z.object( {
+			provider : this.z.string(),
+			url      : this.z.string(),
+		} ) ).optional(),
+		funding : this.z.object( {
+			github          : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
+			open_collective : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
+			ko_fi           : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
+			polar           : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
+			tidelift        : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
+			patreon         : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
+			custom          : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
+		} ).optional(),
+		teams : this.z.array( this.z.object( {
 			name    : this.z.string(),
 			slug    : this.z.string(),
 			desc    : this.z.string().optional(),
@@ -35,6 +49,132 @@ export class GitHubUser extends GitHubSuper {
 			} ) ),
 		} ) ).optional(),
 	} ) }
+
+	async getSocial() {
+
+		try {
+
+			const res = await this.gh.request( 'GET /users/{username}/social_accounts', {
+				username : this.opts.user,
+				headers  : this.opts.requestHeaders,
+			} )
+
+			if ( res.data ) return res.data
+			return undefined
+
+		}
+		catch ( _e ) {
+
+			return undefined
+
+		}
+
+	}
+
+	#setFundingUrl( data: NonNullable<UserRes['funding']> ) {
+
+		const transformPlatform = ( platform: string, accounts?: string | string[] ) => {
+
+			if ( !accounts ) return undefined
+
+			if ( typeof accounts === 'string' ) accounts = [ accounts ]
+
+			if ( platform === 'github' ) {
+
+				return accounts.map( account => `https://github.com/sponsors/${account}` )
+
+			}
+			else if ( platform === 'ko_fi' ) {
+
+				return accounts.map( account => `https://ko-fi.com/${account}` )
+
+			}
+			else if ( platform === 'tidelift' ) {
+
+				return accounts.map( account =>
+					`https://tidelift.com/subscription/pkg/${account.replace( '/', '-' )}`,
+				)
+
+			}
+			else if ( platform === 'open_collective' ) {
+
+				return accounts.map( account => `https://opencollective.com/${account}` )
+
+			}
+			else if ( platform === 'polar' ) {
+
+				return accounts.map( account => `https://polar.sh/${account}` )
+
+			}
+			else if ( platform === 'patreon' ) {
+
+				return accounts.map( account => `https://www.patreon.com/${account}` )
+
+			}
+			else if ( platform === 'custom' ) {
+
+				return accounts
+
+			}
+			else {
+
+				throw new Error( `Unknown platform ${platform}` )
+
+			}
+
+		}
+
+		return {
+			custom          : transformPlatform( 'custom', data.custom ),
+			github          : transformPlatform( 'github', data.github ),
+			open_collective : transformPlatform( 'open_collective', data.open_collective ),
+			ko_fi           : transformPlatform( 'ko_fi', data.ko_fi ),
+			polar           : transformPlatform( 'polar', data.polar ),
+			tidelift        : transformPlatform( 'tidelift', data.tidelift ),
+			patreon         : transformPlatform( 'patreon', data.patreon ),
+		}
+
+	}
+
+	async getFunding() {
+
+		try {
+
+			const response = await this.gh.graphql( `
+    query($owner: String!, $repo: String!) {
+      repository(owner: $owner, name: $repo) {
+        object(expression: "HEAD:FUNDING.yml") {
+          ... on Blob {
+            text
+          }
+        }
+      }
+    }
+  `, {
+				owner : this.opts.user,
+				repo  : this.opts.userType === 'org' ? '.github' : this.opts.user,
+			} )
+
+			// @ts-ignore
+			const fundingText = response.repository?.object?.text
+
+			if ( !fundingText ) throw new Error( 'FUNDING.yml file not found or empty' )
+
+			const fundingData = await getContent<NonNullable<UserRes['funding']>>( fundingText )
+
+			if ( !fundingData || typeof fundingData === 'string' || !Object.keys( fundingData ).length ) return undefined
+			const res = this.#setFundingUrl( fundingData )
+			return res
+
+		}
+		catch ( error ) {
+
+			console.warn( 'Error fetching funding data:', error )
+			return undefined
+
+		}
+
+	}
 
 	async getOrgTeams(): Promise<TeamsResponse | undefined> {
 
@@ -129,6 +269,8 @@ export class GitHubUser extends GitHubSuper {
 				avatar      : data.avatar_url,
 				publicRepos : data.public_repos,
 				followers   : data.followers,
+				funding     : await this.getFunding(),
+				social      : await this.getSocial(),
 				teams       : this.opts.userType === 'org' ? await this.getOrgTeams() : undefined,
 
 			}

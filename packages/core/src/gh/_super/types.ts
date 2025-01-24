@@ -3,96 +3,138 @@ import type { SchemaFn } from '../../_super/main'
 import type { Octokit }  from '@octokit/core'
 
 type Content = string | object | undefined
+type Input = string | string[]
+type ContentAll = { [key in string]: Content }
+
 export type GitHubOpts = {
 	/**
 	 * User ID or Organization ID of GitHub
 	 */
-	user          : string
+	user      : string
 	/**
 	 * GitHub token for get information
 	 */
-	token?        : string
+	token?    : string
 	/**
 	 * @default "user"
 	 */
-	userType?     : 'user' | 'org'
+	userType? : 'user' | 'org'
 	/**
 	 * @default
-	 * const branch = "main"
+	 * "main"
 	 */
-	branch?       : string
+	branch?   : string
 	/**
-	 * List the IDs of repositories to ignore
-	 */
-	ignoreRepo?   : string[]
-	/**
-	 * Configuration file path(s) without extension for get repo information.
-	 *
-	 * Default value provides: [`.${this.user}.yml`,`.${this.user}.yaml`]
+	 * List the IDs/patters of repositories to get
 	 * @default
-	 * const configPath = [`.${this.user}`]
+	 * ['*'] // all repos
+	 * @example ["!.github"] // all less ".github" repo
+	 * @example ["wordpress-*"] // only repos started with "wordpress-""
 	 */
-	configPath?   : string[]
+	repos?    : string[]
 	/**
-	 * Zod Schema for your configuration file.
-	 * @default
-	 * const configSchema = (z) => z.object({}).passthrough()
+	 * List release repositories.
+	 * Opts:
+	 * - true: Active
+	 * - false: Desactive
+	 * - 'no-assets': Does not get 'assets' from releases
+	 * @default false
 	 */
-	configSchema? : SchemaFn
+	releases? : boolean | 'no-assets'
 	/**
-	 * Repo files to get data.
+	 * Get repository content data.
 	 * @default
-	 * const files = {pkg: 'package.json' }
+	 * {
+	 *   package: 'package.json',
+	 * }
 	 */
-	files?        : Record<string, {
+	content?        : Record<string, {
 		/**
 		 * Input path
 		 */
-		input   : string
+		input   : Input
 		/**
-		 * Schema for the input
+		 * Zod Schema for the input
 		 */
 		schema? : SchemaFn
-	} | string>
-	/**
-	 * Get or transform data of repo files.
-	 */
-	onFile?        : ( opts: {
+	} | Input>
+	// /**
+	//  * Configuration file path(s) without extension for get repo information.
+	//  *
+	//  * Default value provides: [`.${this.user}.yml`,`.${this.user}.yaml`]
+	//  * @default
+	//  * [`.${this.user}`]
+	//  */
+	// configPath?   : string[]
+	// /**
+	//  * Zod Schema for your configuration file.
+	//  * @default
+	//  * (z) => z.object({}).passthrough()
+	//  */
+	// configSchema? : SchemaFn
+	// /**
+	//  * Get or transform data of repo files.
+	//  */
+	// onFile?        : ( opts: {
+	// 	/**
+	// 	 * Github username
+	// 	 */
+	// 	user     : string
+	// 	/**
+	// 	 * Current Github repo
+	// 	 */
+	// 	repo     : string
+	// 	/**
+	// 	 * Current Github branch
+	// 	 */
+	// 	branch   : string
+	// 	/**
+	// 	 * If current file is the config path
+	// 	 */
+	// 	isConfig : boolean
+	// 	/**
+	// 	 * File ID
+	// 	 */
+	// 	id       : string
+	// 	/**
+	// 	 * input path
+	// 	 */
+	// 	path     : string
+	// 	/**
+	// 	 * File Content
+	// 	 */
+	// 	content  : Content
+	// } ) => Response<Content>
+	hook?: {
 		/**
-		 * Github username
+		 * Get or transform content data of files.
 		 */
-		user     : string
+		after: ( data: {
+			/** Github Options */
+			opts    : Readonly<GitHubOpts>
+			/**
+			 * File ID
+			 */
+			id      : string
+			/**
+			 * input path
+			 */
+			path    : string
+			/**
+			 * File Content
+			 */
+			content : Content
+		} ) => Response<Content>
 		/**
-		 * Current Github repo
+		 * Hook for after get all repos
 		 */
-		repo     : string
-		/**
-		 * Current Github branch
-		 */
-		branch   : string
-		/**
-		 * If current file is the config path
-		 */
-		isConfig : boolean
-		/**
-		 * File ID
-		 */
-		id       : string
-		/**
-		 * input path
-		 */
-		path     : string
-		/**
-		 * File Content
-		 */
-		content  : Content
-	} ) => Response<Content>
-	/**
-	 * Ignore repo errors.
-	 * If true, the error when getting data from the repository is ignored and undefined is returned
-	 * @default false
-	 */
-	skipError?      : boolean
+		afterAll : <C extends ContentAll>( data: {
+			/** Github Options */
+			opts    : Readonly<GitHubOpts>
+			/** Content */
+			content : C
+		} ) => Response<C>
+	}
 	/**
 	 * @default
 	 * const requestHeaders = { 'X-GitHub-Api-Version': '2022-11-28' }

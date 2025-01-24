@@ -7,7 +7,7 @@ import type { RequiredTypes } from '../../_shared/types'
 
 type GitHubOptsWithDefaults = RequiredTypes<
 	GitHubOpts,
-	'userType' | 'branch' | 'configPath' | 'configSchema' | 'files' | 'skipError' | 'requestHeaders'
+	'userType' | 'branch'  | 'content' | 'requestHeaders' | 'repos'
 >
 
 const ERROR_ID = {
@@ -30,14 +30,14 @@ export class GitHubSuper extends CollectiumSuper<
 
 		const options: this['opts'] = {
 			...opts,
-			branch     : opts.branch || 'main',
-			configPath : ( Array.isArray( opts.configPath )
-				? opts.configPath
-				: [ opts.configPath || `.${opts.user}` ] ).flatMap( p => [ `${p}.yml`, `${p}.yaml` ] ),
+			branch         : opts.branch || 'main',
 			userType       : opts.userType || 'user',
-			configSchema   : opts.configSchema ? opts.configSchema : z => z.object( {} ).passthrough(),
-			files          : opts.files || { pkg: 'package.json' },
-			skipError      : opts.skipError || false,
+			repos          : opts.repos || [ '*' ],
+			content        : opts.content || { package: 'package.json' },
+			// configPath : ( Array.isArray( opts.configPath )
+			// 	? opts.configPath
+			// 	: [ opts.configPath || `.${opts.user}` ] ).flatMap( p => [ `${p}.yml`, `${p}.yaml` ] ),
+			// configSchema : opts.configSchema ? opts.configSchema : z => z.object( {} ).passthrough(),
 			requestHeaders : {
 				...( opts.requestHeaders || {} ),
 				'X-GitHub-Api-Version' : '2022-11-28', // latest: https://docs.github.com/en/rest/about-the-rest-api/api-versions?apiVersion=2022-11-28

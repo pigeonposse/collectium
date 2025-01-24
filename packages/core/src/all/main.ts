@@ -12,19 +12,54 @@ import {
 import type { CustomOpts } from '../custom/main'
 
 export type CollectiumOpts = {
+	/** Github options */
 	github? : GitHubOpts
+	/** Custom options */
 	custom? : CustomOpts
+	/** Global Configuration */
 	config? : CollectiumConfig
 }
 
 export type CollectiumRes = {
 	github? : Awaited<ReturnType<GitHub['get']>>
 	custom? : Awaited<ReturnType<Custom['get']>>
+	/** Execution time in miliseconds */
 	timeout : number
 }
 
 export const defineConfig = ( v: CollectiumOpts ): CollectiumOpts => v
 
+/**
+ * Create a Collectium instance
+ * @see https://collectium.pigeonposse.com/guide/core
+ * @example
+ * import { argv } from 'node:process';
+ *
+ * // Retrieve the GitHub token from the command line arguments
+ * const token = argv[2];
+ *
+ * // Initialize a new Collectium instance
+ * const collectium = new Collectium({
+ *   github: {
+ *     test: {
+ *       user: 'pigeonposse',  // GitHub username or organization
+ *       branch: 'main',       // Target branch
+ *       userType: 'org',      // User type: 'org' for organization, 'user' for individual
+ *       token,                // Authentication token for GitHub
+ *     },
+ *   },
+ *   config: {
+ *     skipError: true, // Skip errors during execution
+ *     skipWarn: true,  // Skip warnings during execution
+ *   },
+ * });
+ *
+ * // Fetch data using the Collectium instance
+ * const data = await collectium.get();
+ *
+ * // Log the retrieved data to the console with full depth
+ * console.dir(data, { depth: Infinity });
+ */
 export class Collectium extends CollectiumSuperMininal {
 
 	github

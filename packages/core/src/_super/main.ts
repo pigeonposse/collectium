@@ -8,8 +8,21 @@ import type { CreateUppercaseKeyValueObject } from '../_shared/types'
 import type { ZodAnyType }                    from '../_shared/validate'
 
 export type CollectiumConfig = {
+	/**
+	 * Set if console.debug is active
+	 * @default false
+	 */
 	debug?     : boolean
+	/**
+	 * Skip method Errors
+	 * If true, the error when getting data from the method is ignored and undefined is returned
+	 * @default false
+	 */
 	skipError? : boolean
+	/**
+	 * Skip warnings from methods
+	 * @default false
+	 */
 	skipWarn?  : boolean
 }
 
