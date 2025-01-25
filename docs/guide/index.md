@@ -4,6 +4,6 @@
 
 Collect information from GitHub and other URLs in a completely customized way.
 
-> 🏗️ DOCUMENTATION UNDER CONSTRUCTION
-
 - [Read more](./core)
+
+> 🏗️ DOCUMENTATION under construction

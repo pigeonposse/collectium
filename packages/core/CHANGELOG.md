@@ -1,5 +1,11 @@
 # @collectium/core
 
+## 0.1.2
+
+### Patch Changes
+
+- add collectium general package
+
 ## 0.1.1
 
 ### Patch Changes

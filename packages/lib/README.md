@@ -1,4 +1,4 @@
-# Github - Collectium Preset
+# Collectium Lib Package
 
 [![About Us](https://img.shields.io/badge/About%20Us-grey?style=for-the-badge&logoColor=white)](https://pigeonposse.com?popup=about)
 [![Donate](https://img.shields.io/badge/Donate-pink?style=for-the-badge&logoColor=white)](https://pigeonposse.com/?popup=donate)
@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/github/license/pigeonposse/collectium?style=for-the-badge&color=green&logoColor=white)](/LICENSE)
 [![Version](https://img.shields.io/npm/v/@collectium/core?style=for-the-badge&color=blue&label=Version)](https://www.npmjs.com/package/@collectium/core)
 
-Github Preset for Collectium
+Collect information from GitHub and other URLs in a completely customized way
 
 ## Table of contents
 
@@ -28,15 +28,15 @@ Github Preset for Collectium
 ## 🔑 Installation
 
 ```bash 
-npm install @collectium/preset-github
+npm install collectium
 # or
-pnpm install @collectium/preset-github
+pnpm install collectium
 # or
-yarn add @collectium/preset-github
+yarn add collectium
 # or
-bun add @collectium/preset-github
+bun add collectium
 # or
-deno add @collectium/preset-github
+deno add collectium
 ```
 
 ## ➕ More

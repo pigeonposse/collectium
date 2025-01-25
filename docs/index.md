@@ -24,34 +24,38 @@ features:
   - title: Library
     icon: 📚
     details: Check the documentation
-    link: /guide/core
+    link: /guide/lib
   - title: REST API
     icon: 🌐
     details: Check the Rest API documentation
     link: /guide/api
+  - title: Presets
+    icon: 💾
+    details: Check the Presets
+    link: /guide/preset
 
 ---
 
 ::: code-group
 
 ```bash [npm]
-npm install @collectium/core
+npm install collectium
 ```
 
 ```bash [pnpm]
-pnpm install @collectium/core
+pnpm install collectium
 ```
 
 ```bash [yarn]
-yarn add @collectium/core
+yarn add collectium
 ```
 
 ```bash [bun]
-bun add @collectium/core
+bun add collectium
 ```
 
 ```bash [deno]
-deno add @collectium/core
+deno add collectium
 ```
 
 :::

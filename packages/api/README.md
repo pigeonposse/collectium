@@ -9,7 +9,7 @@
 [![BANNER](https://github.com/pigeonposse/collectium/blob/main/docs/public/banner.png?raw=true)](https://collectium.pigeonposse.com/)
 
 [![License](https://img.shields.io/github/license/pigeonposse/collectium?style=for-the-badge&color=green&logoColor=white)](/LICENSE)
-[![Version](https://img.shields.io/npm/v/collectium?style=for-the-badge&color=blue&label=Version)](https://www.npmjs.com/package/collectium)
+[![Version](https://img.shields.io/npm/v/@collectium/core?style=for-the-badge&color=blue&label=Version)](https://www.npmjs.com/package/@collectium/core)
 
 Create API app for your Collectium Project
 
@@ -43,6 +43,7 @@ deno add @collectium/api
 
 - 🌞 [Core](https://collectium.pigeonposse.com/guide/core)
 - 📖 [Api](https://collectium.pigeonposse.com/guide/api)
+- [Lib](https://collectium.pigeonposse.com/guide/lib)
 - 💾 [Preset](https://collectium.pigeonposse.com/guide/preset)
   - [Github](https://collectium.pigeonposse.com/guide/preset/github)
 

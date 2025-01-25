@@ -38,7 +38,7 @@
 		"+": "pnpm -F $@",
 		"++": "run() { pnpm -F @*/\"${@:1}\"; }; run $@",
 		".": "dovenv",
-		"build": "pnpm + core build && pnpm + api build && pnpm + 'preset*' build",
+		"build": "pnpm + core build && pnpm + collectium build && pnpm + api build && pnpm + 'preset*' build",
 		"build-assets": "dovenv docs generate-assets --flag=\"--preset minimal\" --flag=\"docs/public/logo.png\"",
 		"build-docs": "dovenv predocs && dovenv docs build",
 		"prepare": "dovenv git husky --silent",
@@ -79,10 +79,6 @@
 		"changelogURL": "https://github.com/pigeonposse/collectium/blob/main/packages/collectium/CHANGELOG.md",
 		"contributingURL": "https://github.com/pigeonposse/.github/blob/main/CONTRIBUTING.md",
 		"licenseURL": "https://github.com/pigeonposse/collectium/blob/main/LICENSE",
-		"type": "library",
-		"subtype": [
-			"api"
-		],
 		"collective": {
 			"id": "pigeonposse",
 			"name": "PigeonPosse",

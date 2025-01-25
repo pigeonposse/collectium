@@ -10,7 +10,7 @@ const core = await getWorkspaceConfig( {
 	metaURL      : import.meta.url,
 	path         : '../',
 	packagesPath : './packages',
-	corePath     : './packages/core',
+	corePath     : './packages/lib',
 } )
 const ICON = {
 	LIB      : '📚',
@@ -20,6 +20,7 @@ const ICON = {
 	START    : '🏁',
 	API      : '📖',
 	EXAMPLES : '💡',
+	PRESET   : '💾',
 	CORE     : '☀️',
 }
 export default defineConfig(
@@ -79,7 +80,7 @@ export default defineConfig(
 			},
 			{
 				value : 'core',
-				desc  : '☀️ Core package',
+				desc  : '🌞 Core package',
 			},
 			{
 				value : 'env',
@@ -109,13 +110,19 @@ export default defineConfig(
 							title   : 'Library',
 							icon    : ICON.LIB,
 							details : 'Check the documentation',
-							link    : '/guide/core',
+							link    : '/guide/lib',
 						},
 						{
 							title   : 'REST API',
 							icon    : ICON.REST_API,
 							details : 'Check the Rest API documentation',
 							link    : '/guide/api',
+						},
+						{
+							title   : 'Presets',
+							icon    : ICON.PRESET,
+							details : 'Check the Library presets',
+							link    : '/guide/preset',
 						},
 					] },
 				},
