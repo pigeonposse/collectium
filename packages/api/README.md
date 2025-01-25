@@ -43,7 +43,8 @@ deno add @collectium/api
 
 - 🌞 [Core](https://collectium.pigeonposse.com/guide/core)
 - 📖 [Api](https://collectium.pigeonposse.com/guide/api)
-- [Preset-github](https://collectium.pigeonposse.com/guide/preset-github)
+- 💾 [Preset](https://collectium.pigeonposse.com/guide/preset)
+  - [Github](https://collectium.pigeonposse.com/guide/preset/github)
 
 
 ---

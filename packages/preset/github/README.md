@@ -1,4 +1,4 @@
-# Collectium Preset-github Package
+# Github - Collectium Preset
 
 [![About Us](https://img.shields.io/badge/About%20Us-grey?style=for-the-badge&logoColor=white)](https://pigeonposse.com?popup=about)
 [![Donate](https://img.shields.io/badge/Donate-pink?style=for-the-badge&logoColor=white)](https://pigeonposse.com/?popup=donate)
@@ -43,7 +43,8 @@ deno add @collectium/preset-github
 
 - 🌞 [Core](https://collectium.pigeonposse.com/guide/core)
 - 📖 [Api](https://collectium.pigeonposse.com/guide/api)
-- [Preset-github](https://collectium.pigeonposse.com/guide/preset-github)
+- 💾 [Preset](https://collectium.pigeonposse.com/guide/preset)
+  - [Github](https://collectium.pigeonposse.com/guide/preset/github)
 
 
 ---
