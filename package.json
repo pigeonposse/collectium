@@ -31,7 +31,8 @@
 	},
 	"type": "module",
 	"workspaces": [
-		"packages/*"
+		"packages/*",
+		"packages/preset/*"
 	],
 	"scripts": {
 		"+": "pnpm -F $@",

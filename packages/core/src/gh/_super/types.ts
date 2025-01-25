@@ -1,10 +1,14 @@
-import type { Response } from '../../_shared/types'
+
+import type {
+	Response,
+	ResponseVoid,
+} from '../../_shared/types'
 import type { SchemaFn } from '../../_super/main'
+import type { RepoRes }  from '../../gh/repo/main'
 import type { Octokit }  from '@octokit/core'
 
 type Content = string | object | undefined
 type Input = string | string[]
-type ContentAll = { [key in string]: Content }
 
 export type GitHubOpts = {
 	/**
@@ -35,9 +39,9 @@ export type GitHubOpts = {
 	/**
 	 * List release repositories.
 	 * Opts:
-	 * - true: Active
-	 * - false: Desactive
-	 * - 'no-assets': Does not get 'assets' from releases
+	 * - **true**: Active
+	 * - **false**: Desactive
+	 * - **'no-assets'**: Does not get 'assets' from releases
 	 * @default false
 	 */
 	releases? : boolean | 'no-assets'
@@ -58,60 +62,20 @@ export type GitHubOpts = {
 		 */
 		schema? : SchemaFn
 	} | Input>
-	// /**
-	//  * Configuration file path(s) without extension for get repo information.
-	//  *
-	//  * Default value provides: [`.${this.user}.yml`,`.${this.user}.yaml`]
-	//  * @default
-	//  * [`.${this.user}`]
-	//  */
-	// configPath?   : string[]
-	// /**
-	//  * Zod Schema for your configuration file.
-	//  * @default
-	//  * (z) => z.object({}).passthrough()
-	//  */
-	// configSchema? : SchemaFn
-	// /**
-	//  * Get or transform data of repo files.
-	//  */
-	// onFile?        : ( opts: {
-	// 	/**
-	// 	 * Github username
-	// 	 */
-	// 	user     : string
-	// 	/**
-	// 	 * Current Github repo
-	// 	 */
-	// 	repo     : string
-	// 	/**
-	// 	 * Current Github branch
-	// 	 */
-	// 	branch   : string
-	// 	/**
-	// 	 * If current file is the config path
-	// 	 */
-	// 	isConfig : boolean
-	// 	/**
-	// 	 * File ID
-	// 	 */
-	// 	id       : string
-	// 	/**
-	// 	 * input path
-	// 	 */
-	// 	path     : string
-	// 	/**
-	// 	 * File Content
-	// 	 */
-	// 	content  : Content
-	// } ) => Response<Content>
+	/**
+	 * Hook for your opts.
+	 */
 	hook?: {
 		/**
-		 * Get or transform content data of files.
+		 * Hook for each repo file.
+		 *
+		 * Useful for getting/transforming data from file contents.
 		 */
-		after: ( data: {
-			/** Github Options */
-			opts    : Readonly<GitHubOpts>
+		onContent?: ( params: {
+			/**
+			 * Github Options
+			 */
+			opts    : GitHubOpts
 			/**
 			 * File ID
 			 */
@@ -124,16 +88,22 @@ export type GitHubOpts = {
 			 * File Content
 			 */
 			content : Content
-		} ) => Response<Content>
+		} ) => Response<Content | ResponseVoid>
 		/**
-		 * Hook for after get all repos
+		 * Hook for after getting repositories data
 		 */
-		afterAll : <C extends ContentAll>( data: {
-			/** Github Options */
-			opts    : Readonly<GitHubOpts>
-			/** Content */
-			content : C
-		} ) => Response<C>
+		afterRepo? : ( params: {
+			/**
+			 * Github Options
+			 */
+			opts : GitHubOpts
+			/**
+			 * Object with all the data of the repository obtained
+			 *
+			 * Useful for getting/transforming data from repository.
+			 */
+			data : RepoRes[number]
+		} ) => Response<RepoRes[number] | ResponseVoid>
 	}
 	/**
 	 * @default

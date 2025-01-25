@@ -61,9 +61,8 @@ export class Custom extends CollectiumSuper<CustomOpts, ErrorID> {
 			if ( onRes ) data = onRes
 
 			const schema = opt.schema?.( this.z )
-			if ( schema ) await this.validateSchema( schema, data )
-
-			res[key] = data
+			if ( schema ) res[key] = await this.validateSchema( schema, data )
+			else res[key] = data
 
 		}
 		return res

@@ -4,8 +4,11 @@ import {
 } from '../_shared/error'
 import { z } from '../_shared/validate'
 
-import type { CreateUppercaseKeyValueObject } from '../_shared/types'
-import type { ZodAnyType }                    from '../_shared/validate'
+import type {
+	CreateUppercaseKeyValueObject,
+	ResponseVoid,
+} from '../_shared/types'
+import type { ZodAnyType } from '../_shared/validate'
 
 export type CollectiumConfig = {
 	/**
@@ -26,13 +29,14 @@ export type CollectiumConfig = {
 	skipWarn?  : boolean
 }
 
-export type SchemaFn = ( zod: typeof z ) => ZodAnyType | undefined
+export type SchemaFn = ( zod: typeof z ) => ZodAnyType | ResponseVoid
 
 const ERROR_ID = { SCHEMA_VALIDATION: 'SCHEMA_VALIDATION' } as const
+
 export class CollectiumSuperMininal  {
 
 	/**
-	 * Zod instance,
+	 * Wrapped Zod instance with restricted methods
 	 */
 	z = z
 
@@ -103,8 +107,14 @@ export class CollectiumSuper<Opts, ErrorID extends string> extends CollectiumSup
 	protected async validateSchema<D = unknown>( schema: ZodAnyType, data: D ): Promise<D> {
 
 		const [ error, res ] = await catchError( ( async () => schema.parse( data ) )() )
-		// @ts-ignore
-		if ( error ) throw new this.Error( this.ERROR_ID.SCHEMA_VALIDATION, { e: error } )
+
+		if ( error ) {
+
+			if ( this.config.skipError ) console.warn( this.ERROR_ID.SCHEMA_VALIDATION, error.message )
+			// @ts-ignore
+			else throw new this.Error( this.ERROR_ID.SCHEMA_VALIDATION, { e: error } )
+
+		}
 		return res
 
 	}

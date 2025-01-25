@@ -61,6 +61,22 @@ importers:
         specifier: 0.18.1
         version: 0.18.1(hono@4.6.16)(miniflare@3.20241230.0)
 
+  packages/client:
+    dependencies:
+      '@collectium/core':
+        specifier: workspace:*
+        version: link:../core
+      backan:
+        specifier: 0.2.0
+        version: 0.2.0(zod@3.24.1)
+    devDependencies:
+      '@backan/server':
+        specifier: 0.2.0
+        version: 0.2.0(hono@4.6.16)
+      '@hono/vite-dev-server':
+        specifier: 0.18.1
+        version: 0.18.1(hono@4.6.16)(miniflare@3.20241230.0)
+
   packages/core:
     dependencies:
       '@hono/zod-openapi':
@@ -83,11 +99,11 @@ importers:
         specifier: 4.0.9
         version: 4.0.9
 
-  packages/preset-github:
+  packages/preset/github:
     dependencies:
       '@collectium/core':
         specifier: workspace:*
-        version: link:../core
+        version: link:../../core
 
 packages:
 

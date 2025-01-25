@@ -8,65 +8,125 @@ import { GitHubSuper } from '../_super/main'
 import type {
 	ZodInfer,
 	Zod,
-	ZodAnyType,
 } from '../../_shared/validate'
 import type { GitHubOpts } from '../_super/types'
 
-const fileContentRes = ( z: Zod ) => z.union( [ z.string(), z.object( {} ).passthrough().transform( val => val as object ) ] ).optional()
+export type RepoRes = {
+	id        : string
+	url       : string
+	desc?     : string
+	homepage? : string
 
-const schema = ( z: Zod, customConf?: ZodAnyType ) => ( {
-	res : z.array( z.object( {
-		id       : z.string(),
-		url      : z.string(),
-		desc     : z.string().optional(),
-		homepage : z.string().optional(),
+	isPrivate  : boolean
+	isArchived : boolean
+	isDisabled : boolean
+	isFork     : boolean
+	isTemplate : boolean
+	isPinned   : boolean
 
-		isPrivate  : z.boolean(),
-		isArchived : z.boolean(),
-		isDisabled : z.boolean(),
-		isFork     : z.boolean(),
-		isTemplate : z.boolean(),
-		isPinned   : z.boolean(),
+	stargazers : number
+	watchers   : number
+	forks      : number
+	issues     : number
+	size?      : number
 
-		stargazers : z.number(),
-		watchers   : z.number(),
-		forks      : z.number(),
-		issues     : z.number(),
-		size       : z.number().optional(),
+	language?      : string
+	tags?          : string[]
+	createdAt?     : string
+	updatedAt?     : string
+	defaultBranch? : string
 
-		language      : z.string().optional(),
-		tags          : z.array( z.string() ).optional(),
-		createdAt     : z.string().optional(),
-		updatedAt     : z.string().optional(),
-		defaultBranch : z.string().optional(),
-		license       : z.object( {
-			key  : z.string().optional(),
-			name : z.string().optional(),
-			url  : z.string().optional(),
-		} ).optional(),
+	license?: {
+		key?  : string
+		name? : string
+		url?  : string
+	}
 
-		content  : customConf || z.record( z.string(), fileContentRes( z ) ).optional(),
-		releases : z.array( z.object( {
-			url         : z.string(),
-			tag         : z.string(),
-			name        : z.string(),
-			createdAt   : z.string(),
-			publishedAt : z.string(),
-			assets      : z.array( z.object( {
+	content? : Record<string, unknown>
+
+	releases?: {
+		url         : string
+		tag         : string
+		name        : string
+		createdAt   : string
+		publishedAt : string
+		assets?: {
+			name        : string
+			id          : number
+			size        : number
+			downloadURL : string
+			downloads   : number
+			createdAt   : string
+			updatedAt   : string
+		}[]
+	}[]
+}[]
+
+const schema = ( z: Zod, opts: GitHubOpts ) => {
+
+	const fileContentRes = ( z: Zod ) => z.union( [ z.string(), z.object( {} ).passthrough().transform( val => val as object ) ] ).optional()
+
+	return {
+		res : z.array( z.object( {
+			id       : z.string(),
+			url      : z.string(),
+			desc     : z.string().optional(),
+			homepage : z.string().optional(),
+
+			isPrivate  : z.boolean(),
+			isArchived : z.boolean(),
+			isDisabled : z.boolean(),
+			isFork     : z.boolean(),
+			isTemplate : z.boolean(),
+			isPinned   : z.boolean(),
+
+			stargazers : z.number(),
+			watchers   : z.number(),
+			forks      : z.number(),
+			issues     : z.number(),
+			size       : z.number().optional(),
+
+			language      : z.string().optional(),
+			tags          : z.array( z.string() ).optional(),
+			createdAt     : z.string().optional(),
+			updatedAt     : z.string().optional(),
+			defaultBranch : z.string().optional(),
+			license       : z.object( {
+				key  : z.string().optional(),
+				name : z.string().optional(),
+				url  : z.string().optional(),
+			} ).optional(),
+
+			content : opts.content
+				? z.object( objectMap( opts.content, d => {
+
+					if ( typeof d === 'string' || Array.isArray( d ) ) return fileContentRes( z )
+					else return d.schema?.( z ) || fileContentRes( z )
+
+				} ) ).optional()
+				: z.record( z.string(), fileContentRes( z ) ),
+			releases : z.array( z.object( {
+				url         : z.string(),
+				tag         : z.string(),
 				name        : z.string(),
-				id          : z.number(),
-				size        : z.number(),
-				downloadURL : z.string(),
-				downloads   : z.number(),
 				createdAt   : z.string(),
-				updatedAt   : z.string(),
+				publishedAt : z.string(),
+				assets      : z.array( z.object( {
+					name        : z.string(),
+					id          : z.number(),
+					size        : z.number(),
+					downloadURL : z.string(),
+					downloads   : z.number(),
+					createdAt   : z.string(),
+					updatedAt   : z.string(),
+				} ) ).optional(),
 			} ) ).optional(),
-		} ) ).optional(),
-	} ) ),
-	fileContentRes : fileContentRes( z ),
-} )
+		} ) ) satisfies Zod.ZodSchema<RepoRes>,
+		fileContentRes : fileContentRes( z ),
+	}
 
-export type RepoRes = ZodInfer<GitHubRepo['schema']['res']>
+}
+
 export type RepoContentRes = RepoRes[number]['content']
 export type RepoReleases = RepoRes[number]['releases']
 export type RepoFileContentRes = ZodInfer<GitHubRepo['schema']['fileContentRes']>
@@ -79,14 +139,7 @@ export class GitHubRepo extends GitHubSuper {
 
 		super( opts, config )
 
-		const getSchema = objectMap( this.opts.content, d => {
-
-			if ( typeof d === 'string' || Array.isArray( d ) ) return fileContentRes( this.z )
-			else return d.schema?.( this.z ) || fileContentRes( this.z )
-
-		} )
-
-		this.schema = schema( this.z, this.z.object( getSchema ) )
+		this.schema = schema( this.z, this.opts )
 
 	}
 
@@ -197,32 +250,29 @@ export class GitHubRepo extends GitHubSuper {
 				const paths  = typeof input === 'string' ? [ input ] : input
 				const schema = isObj ? await file.schema?.( this.z ) : undefined
 
-				for ( const path in paths ) {
+				for ( const path of paths ) {
 
 					if ( res[key] ) continue
 
 					let content = await this.geFileContent( repo, path )
 
-					const resOn = await this.opts?.hook?.after?.( {
+					const resOn = await this.opts?.hook?.onContent?.( {
 						opts : this.opts,
 						path : path,
 						id   : key,
 						content,
 					} )
-					content     = resOn ? resOn : content
 
-					if ( schema ) await this.validateSchema( schema, content )
-					res[key] = content
+					content = resOn ? resOn : content
+
+					if ( schema ) res[key] = await this.validateSchema( schema, content )
+					else res[key] = content
 
 				}
 
 			}
 
-			const resHooked = await this.opts?.hook?.afterAll?.( {
-				content : res,
-				opts    : this.opts,
-			} )
-			return resHooked || res
+			return res
 
 		}
 		catch ( e ) {
@@ -259,7 +309,7 @@ export class GitHubRepo extends GitHubSuper {
 
 				if ( !reposMatch.includes( repo.name ) ) return undefined
 
-				return {
+				const res = {
 					id       : repo.name,
 					url      : repo.html_url,
 					desc     : repo.description || undefined,
@@ -288,6 +338,14 @@ export class GitHubRepo extends GitHubSuper {
 					releases      : await this.getReleases( repo.name ),
 				}
 
+				const resHooked = await this.opts?.hook?.afterRepo?.( {
+					data : res,
+					opts : this.opts,
+				} )
+				return resHooked || res
+
+				// return res
+
 			} ) )
 
 			return repos.filter( d => d !== undefined )
@@ -313,6 +371,7 @@ export class GitHubRepo extends GitHubSuper {
 				owner   : this.opts.user,
 				repo,
 				path,
+				ref     : this.opts.branch,
 				headers : this.opts.requestHeaders,
 			} )
 

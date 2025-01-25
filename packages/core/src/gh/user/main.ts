@@ -22,17 +22,24 @@ export class GitHubUser extends GitHubSuper {
 		name        : this.z.string().optional(),
 		description : this.z.string().optional(),
 		social      : this.z.array( this.z.object( {
-			provider : this.z.string(),
-			url      : this.z.string(),
+			provider : this.z.union( [
+				this.z.literal( 'generic' ),
+				this.z.literal( 'twitter' ),
+				this.z.literal( 'instagram' ),
+				this.z.literal( 'medium' ),
+				this.z.literal( 'opencollective' ),
+				this.z.string(),
+			] ),
+			url : this.z.string(),
 		} ) ).optional(),
 		funding : this.z.object( {
-			github          : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
-			open_collective : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
-			ko_fi           : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
-			polar           : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
-			tidelift        : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
-			patreon         : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
-			custom          : this.z.string().or( this.z.array( this.z.string() ) ).optional(),
+			github          : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
+			open_collective : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
+			ko_fi           : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
+			polar           : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
+			tidelift        : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
+			patreon         : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
+			custom          : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
 		} ).optional(),
 		teams : this.z.array( this.z.object( {
 			name    : this.z.string(),
@@ -50,7 +57,7 @@ export class GitHubUser extends GitHubSuper {
 		} ) ).optional(),
 	} ) }
 
-	async getSocial() {
+	async getSocial(): Promise<UserRes['social'] | undefined> {
 
 		try {
 
@@ -59,7 +66,17 @@ export class GitHubUser extends GitHubSuper {
 				headers  : this.opts.requestHeaders,
 			} )
 
-			if ( res.data ) return res.data
+			if ( res.data ) return res.data.map( d => ( d.url.startsWith( 'https://medium.com/' )
+				? {
+					provider : 'medium',
+					url      : d.url,
+				}
+				: d.url.startsWith( 'https://opencollective.com/' )
+					? {
+						provider : 'opencollective',
+						url      : d.url,
+					}
+					: d ) )
 			return undefined
 
 		}

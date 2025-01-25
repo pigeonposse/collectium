@@ -18,10 +18,9 @@ const ERROR_ID = {
 	GET_USER_TEAMS_DATA   : 'GET_USER_TEAMS_DATA',
 } as const
 
-type E = typeof ERROR_ID[keyof typeof ERROR_ID]
-
 export class GitHubSuper extends CollectiumSuper<
-	GitHubOptsWithDefaults, E
+	GitHubOptsWithDefaults,
+	typeof ERROR_ID[keyof typeof ERROR_ID]
 >  {
 
 	protected gh
@@ -54,8 +53,6 @@ export class GitHubSuper extends CollectiumSuper<
 			auth    : opts.token,
 			request : { signal: this.controller.signal },
 		} )
-
-		console.debug( { options: this.opts } )
 
 	}
 

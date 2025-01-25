@@ -1,4 +1,5 @@
 
+import { objectMap }      from '../_shared/obj'
 import {
 	CollectiumSuperMininal,
 	type CollectiumConfig,
@@ -76,8 +77,18 @@ export class Collectium extends CollectiumSuperMininal {
 		this.schema = { res : this.z.object( {
 			github  : this.github.schema.res.optional(),
 			custom  : this.custom.schema.res.optional(),
-			timeout : this.z.number(),
+			timeout : this.z.number().describe( 'time in miliseconds' ),
 		} ) }
+
+		if ( this.config?.debug )
+			console.dir( {
+				github : objectMap( this.github.opts, d => ( {
+					...d,
+					token : !d.token || '***',
+				} ) ),
+				custom : this.custom.opts,
+				config : this.config,
+			}, { depth: Infinity } )
 
 	}
 
