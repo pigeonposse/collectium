@@ -1,6 +1,6 @@
 {
 	"name": "collectium",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "Collect information from GitHub and other URLs in a completely customized way",
 	"keywords": [
 		"pp",

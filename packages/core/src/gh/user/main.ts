@@ -10,6 +10,38 @@ import type { ZodInfer } from '../../_shared/validate'
 export type UserRes = ZodInfer<GitHubUser['schema']['res']>
 export type TeamsResponse = UserRes['teams']
 
+const FUNDING_PROVIDER = {
+	custom         : 'custom',
+	github         : 'github',
+	opencollective : 'opencollective',
+	kofi           : 'kofi',
+	polar          : 'polar',
+	tidelift       : 'tidelift',
+	patreon        : 'patreon',
+} as const
+
+const SOCIAL_PROVIDER = {
+	custom         : 'custom',
+	twitter        : 'twitter',
+	instagram      : 'instagram',
+	medium         : 'medium',
+	opencollective : 'opencollective',
+} as const
+
+type Social = typeof SOCIAL_PROVIDER[keyof typeof SOCIAL_PROVIDER]
+type Funding = typeof FUNDING_PROVIDER[keyof typeof FUNDING_PROVIDER]
+const SOCIAL  = Object.values( SOCIAL_PROVIDER )
+const FUNDING = Object.values( FUNDING_PROVIDER )
+
+type FundingGH = {
+	custom?          : string | string[]
+	github?          : string | string[]
+	open_collective? : string | string[]
+	ko_fi?           : string | string[]
+	polar?           : string | string[]
+	tidelift?        : string | string[]
+	patreon?         : string | string[]
+}
 export class GitHubUser extends GitHubSuper {
 
 	schema = { res : this.z.object( {
@@ -22,25 +54,13 @@ export class GitHubUser extends GitHubSuper {
 		name        : this.z.string().optional(),
 		description : this.z.string().optional(),
 		social      : this.z.array( this.z.object( {
-			provider : this.z.union( [
-				this.z.literal( 'generic' ),
-				this.z.literal( 'twitter' ),
-				this.z.literal( 'instagram' ),
-				this.z.literal( 'medium' ),
-				this.z.literal( 'opencollective' ),
-				this.z.string(),
-			] ),
-			url : this.z.string(),
+			provider : this.z.enum( SOCIAL as [Social] ),
+			url      : this.z.string(),
 		} ) ).optional(),
-		funding : this.z.object( {
-			github          : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
-			open_collective : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
-			ko_fi           : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
-			polar           : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
-			tidelift        : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
-			patreon         : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
-			custom          : this.z.union( [ this.z.string(), this.z.array( this.z.string() ) ] ).optional(),
-		} ).optional(),
+		funding : this.z.array( this.z.object( {
+			provider : this.z.enum( FUNDING as [Funding] ),
+			url      : this.z.string(),
+		} ) ).optional(),
 		teams : this.z.array( this.z.object( {
 			name    : this.z.string(),
 			slug    : this.z.string(),
@@ -66,17 +86,14 @@ export class GitHubUser extends GitHubSuper {
 				headers  : this.opts.requestHeaders,
 			} )
 
-			if ( res.data ) return res.data.map( d => ( d.url.startsWith( 'https://medium.com/' )
-				? {
-					provider : 'medium',
-					url      : d.url,
-				}
-				: d.url.startsWith( 'https://opencollective.com/' )
-					? {
-						provider : 'opencollective',
-						url      : d.url,
-					}
-					: d ) )
+			if ( res.data ) return res.data.map( d => ( {
+				provider : d.url.startsWith( 'https://opencollective.com/' )
+					? 'opencollective'
+					:  d.url.startsWith( 'https://medium.com/' )
+						? 'medium'
+						: SOCIAL.includes( d.provider as Social ) ? d.provider as Social : 'custom',
+				url : d.url,
+			} ) )
 			return undefined
 
 		}
@@ -88,68 +105,59 @@ export class GitHubUser extends GitHubSuper {
 
 	}
 
-	#setFundingUrl( data: NonNullable<UserRes['funding']> ) {
+	#setFundingUrl( data: FundingGH ): UserRes['funding'] {
 
-		const transformPlatform = ( platform: string, accounts?: string | string[] ) => {
+		const transformPlatform = ( platform: string, accounts?: FundingGH[keyof FundingGH] ): UserRes['funding'] => {
 
 			if ( !accounts ) return undefined
 
 			if ( typeof accounts === 'string' ) accounts = [ accounts ]
 
-			if ( platform === 'github' ) {
-
-				return accounts.map( account => `https://github.com/sponsors/${account}` )
-
-			}
-			else if ( platform === 'ko_fi' ) {
-
-				return accounts.map( account => `https://ko-fi.com/${account}` )
-
-			}
-			else if ( platform === 'tidelift' ) {
-
-				return accounts.map( account =>
-					`https://tidelift.com/subscription/pkg/${account.replace( '/', '-' )}`,
-				)
-
-			}
-			else if ( platform === 'open_collective' ) {
-
-				return accounts.map( account => `https://opencollective.com/${account}` )
-
-			}
-			else if ( platform === 'polar' ) {
-
-				return accounts.map( account => `https://polar.sh/${account}` )
-
-			}
-			else if ( platform === 'patreon' ) {
-
-				return accounts.map( account => `https://www.patreon.com/${account}` )
-
-			}
-			else if ( platform === 'custom' ) {
-
-				return accounts
-
-			}
-			else {
-
+			if ( platform === 'github' )
+				return accounts.map( account => ( {
+					provider : FUNDING_PROVIDER.github,
+					url      : `https://github.com/sponsors/${account}`,
+				} ) )
+			else if ( platform === 'ko_fi' )
+				return accounts.map( account => ( {
+					provider : FUNDING_PROVIDER.kofi,
+					url      : `https://ko-fi.com/${account}`,
+				} ) )
+			else if ( platform === 'tidelift' )
+				return accounts.map( account => ( {
+					provider : FUNDING_PROVIDER.tidelift,
+					url      : `https://tidelift.com/subscription/pkg/${account.replace( '/', '-' )}`,
+				} ) )
+			else if ( platform === 'open_collective' )
+				return accounts.map( account => ( {
+					provider : FUNDING_PROVIDER.opencollective,
+					url      : `https://opencollective.com/${account}`,
+				} ) )
+			else if ( platform === 'polar' )
+				return accounts.map( account => ( {
+					provider : FUNDING_PROVIDER.polar,
+					url      : `https://polar.sh/${account}`,
+				} ) )
+			else if ( platform === 'patreon' )
+				return accounts.map( account =>  ( {
+					provider : FUNDING_PROVIDER.patreon,
+					url      : `https://www.patreon.com/${account}`,
+				} ) )
+			else if ( platform === 'custom' )
+				return accounts.map( account => ( {
+					provider : 'custom',
+					url      : account,
+				} ) )
+			else
 				throw new Error( `Unknown platform ${platform}` )
 
-			}
-
 		}
 
-		return {
-			custom          : transformPlatform( 'custom', data.custom ),
-			github          : transformPlatform( 'github', data.github ),
-			open_collective : transformPlatform( 'open_collective', data.open_collective ),
-			ko_fi           : transformPlatform( 'ko_fi', data.ko_fi ),
-			polar           : transformPlatform( 'polar', data.polar ),
-			tidelift        : transformPlatform( 'tidelift', data.tidelift ),
-			patreon         : transformPlatform( 'patreon', data.patreon ),
-		}
+		if ( typeof data !== 'object' || !Object.keys( data ).length ) return undefined
+
+		return  Object.entries( data )
+			.flatMap( ( [ k, v ] ) => transformPlatform( k, v ) )
+			.filter( d => d !== undefined )
 
 	}
 
@@ -177,7 +185,7 @@ export class GitHubUser extends GitHubSuper {
 
 			if ( !fundingText ) throw new Error( 'FUNDING.yml file not found or empty' )
 
-			const fundingData = await getContent<NonNullable<UserRes['funding']>>( fundingText )
+			const fundingData = await getContent<FundingGH>( fundingText )
 
 			if ( !fundingData || typeof fundingData === 'string' || !Object.keys( fundingData ).length ) return undefined
 			const res = this.#setFundingUrl( fundingData )

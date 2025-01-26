@@ -8,7 +8,7 @@ Create a Collectium instance
 
 #### See
 
-https://collectium.pigeonposse.com/guide/core
+<https://collectium.pigeonposse.com/guide/core>
 
 #### Example
 
