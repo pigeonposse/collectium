@@ -1,5 +1,14 @@
 # @collectium/api
 
+## 0.2.1
+
+### Patch Changes
+
+- Add check feats
+
+- Updated dependencies []:
+  - @collectium/core@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

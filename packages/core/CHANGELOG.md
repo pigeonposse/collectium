@@ -1,5 +1,11 @@
 # @collectium/core
 
+## 0.2.1
+
+### Patch Changes
+
+- Add check feats
+
 ## 0.2.0
 
 ### Minor Changes

@@ -52,7 +52,7 @@ const run = async () => {
 				const id = getCMD( 'check' )
 				if ( !id ) throw Error( 'Command need a value. Example: $0 check <id>' )
 
-				const check = new Checker( config  )
+				const check = new Checker( config )
 
 				await check.run( id, { cwd: OPTION.CWD } )
 
