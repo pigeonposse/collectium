@@ -31,7 +31,7 @@ features:
     link: /guide/api
   - title: Presets
     icon: 💾
-    details: Check the Presets
+    details: Check the Library presets
     link: /guide/preset
 
 ---

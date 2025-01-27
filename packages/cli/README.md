@@ -1,4 +1,4 @@
-# Collectium Api Package
+# Collectium Cli Package
 
 [![About Us](https://img.shields.io/badge/About%20Us-grey?style=for-the-badge&logoColor=white)](https://pigeonposse.com?popup=about)
 [![Donate](https://img.shields.io/badge/Donate-pink?style=for-the-badge&logoColor=white)](https://pigeonposse.com/?popup=donate)
@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/github/license/pigeonposse/collectium?style=for-the-badge&color=green&logoColor=white)](/LICENSE)
 [![Version](https://img.shields.io/npm/v/collectium?style=for-the-badge&color=blue&label=Version)](https://www.npmjs.com/package/collectium)
 
-Create API app for your Collectium Project
+Collectium CLI
 
 ## Table of contents
 
@@ -28,15 +28,15 @@ Create API app for your Collectium Project
 ## 🔑 Installation
 
 ```bash 
-npm install @collectium/api
+npm install @collectium/cli
 # or
-pnpm install @collectium/api
+pnpm install @collectium/cli
 # or
-yarn add @collectium/api
+yarn add @collectium/cli
 # or
-bun add @collectium/api
+bun add @collectium/cli
 # or
-deno add @collectium/api
+deno add @collectium/cli
 ```
 
 ## ➕ More

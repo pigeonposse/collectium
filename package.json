@@ -38,7 +38,7 @@
 		"+": "pnpm -F $@",
 		"++": "run() { pnpm -F @*/\"${@:1}\"; }; run $@",
 		".": "dovenv",
-		"build": "pnpm + core build && pnpm + collectium build && pnpm + api build && pnpm + 'preset*' build",
+		"build": "pnpm + core build && pnpm + check build && pnpm + cli build 66 pnpm + collectium build && pnpm + api build && pnpm + 'preset*' build",
 		"build-assets": "dovenv docs generate-assets --flag=\"--preset minimal\" --flag=\"docs/public/logo.png\"",
 		"build-docs": "dovenv predocs && dovenv docs build",
 		"prepare": "dovenv git husky --silent",

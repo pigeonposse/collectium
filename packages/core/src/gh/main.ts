@@ -73,7 +73,7 @@ export class GitHub extends CollectiumSuper<GitHubOpts, string> {
 		if ( !this.data || !this.data.rate || !this.data.data?.[index]?.repo )
 			throw new Error( `Data does not exist for index ${index}` )
 
-		const s = new Sort( this.data.data?.[index]?.repo  )
+		const s = new Sort( this.data.data?.[index]?.repo )
 		return s
 
 	}

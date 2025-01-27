@@ -2,6 +2,7 @@ import { defineBuildConfig } from 'unbuild'
 
 export default defineBuildConfig( [
 	{
+		entries     : [ './src/main' ],
 		sourcemap   : false,
 		declaration : true,
 		failOnWarn  : true,
@@ -9,6 +10,6 @@ export default defineBuildConfig( [
 			minify : true,
 			target : 'node20',
 		} },
-		externals : [ 'zod' ],
+		externals : [ '@collectium/core' ],
 	},
 ] )

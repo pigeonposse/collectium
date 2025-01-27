@@ -333,9 +333,15 @@ export class GitHubRepo extends GitHubSuper {
 					createdAt     : repo.created_at || undefined,
 					updatedAt     : repo.updated_at || undefined,
 					defaultBranch : repo.default_branch,
-					license       : repo.license || undefined,
-					content       : await this.getContent( repo.name ),
-					releases      : await this.getReleases( repo.name ),
+					license       : repo.license
+						? {
+							key  : repo.license.key,
+							name : repo.license.name,
+							url  : repo.license.url,
+						}
+						: undefined,
+					content  : await this.getContent( repo.name ),
+					releases : await this.getReleases( repo.name ),
 				}
 
 				const resHooked = await this.opts?.hook?.afterRepo?.( {

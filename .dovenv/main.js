@@ -1,17 +1,12 @@
 import { defineConfig } from '@dovenv/core'
 import {
 	getSidebar,
-	getWorkspaceConfig,
 	pigeonposseMonorepoTheme,
 	Predocs,
 } from '@dovenv/theme-pigeonposse'
 
-const core = await getWorkspaceConfig( {
-	metaURL      : import.meta.url,
-	path         : '../',
-	packagesPath : './packages',
-	corePath     : './packages/lib',
-} )
+import { core } from './core.js'
+
 const ICON = {
 	LIB      : '📚',
 	BIN      : '🔢',
@@ -21,12 +16,12 @@ const ICON = {
 	API      : '📖',
 	EXAMPLES : '💡',
 	PRESET   : '💾',
-	CORE     : '☀️',
+	CORE     : '🌞',
 }
+
 export default defineConfig(
 	pigeonposseMonorepoTheme( {
 		core,
-		// lint : { staged: { '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json}': 'dovenv lint eslint --fix' } },
 		docs : async config => {
 
 			const sidebar = await getSidebar( config )

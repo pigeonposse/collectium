@@ -38,7 +38,7 @@ export class CollectiumSuperMininal  {
 	/**
 	 * Wrapped Zod instance with restricted methods
 	 */
-	z = z
+	protected z = z
 
 	/**
 	 * Confugration
@@ -55,6 +55,7 @@ export class CollectiumSuperMininal  {
 	}
 
 }
+
 export class CollectiumSuper<Opts, ErrorID extends string> extends CollectiumSuperMininal  {
 
 	/**
