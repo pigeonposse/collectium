@@ -41,10 +41,10 @@
 	},
 	"dependencies": {
 		"@hono/zod-openapi": "0.18.3",
-		"globby": "^14.0.2",
+		"globby": "14.0.2",
 		"js-yaml": "4.1.0",
 		"smol-toml": "1.3.1",
-		"zod-validation-error": "^3.4.0"
+		"zod-validation-error": "3.4.0"
 	},
 	"devDependencies": {
 		"@collectium/core": "workspace:*",

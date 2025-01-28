@@ -1,8 +1,7 @@
-import { z }         from '@hono/zod-openapi'
-import { getConfig } from 'config'
-import { globby }    from 'globby'
-import { readFile }  from 'node:fs/promises'
-import { join }      from 'node:path'
+import { z }        from '@hono/zod-openapi'
+import { globby }   from 'globby'
+import { readFile } from 'node:fs/promises'
+import { join }     from 'node:path'
 import {
 	cwd,
 	exit,
@@ -10,6 +9,7 @@ import {
 import { styleText } from 'node:util'
 import { fromError } from 'zod-validation-error'
 
+import { getConfig }  from './config'
 import { getContent } from './content'
 
 import type { CollectiumOpts } from '@collectium/core'
