@@ -1,6 +1,6 @@
 {
 	"name": "@collectium/api",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"description": "Create API app for your Collectium Project",
 	"keywords": [
 		"pp",
@@ -29,9 +29,31 @@
 		"url": "https://github.com/angelespejo"
 	},
 	"type": "module",
+	"exports": {
+		".": {
+			"import": "./dist/main.js",
+			"require": "./dist/main.cjs",
+			"types": "./dist/main.d.ts"
+		},
+		"./local": {
+			"import": "./dist/local.js",
+			"require": "./dist/local.cjs",
+			"types": "./dist/local.d.ts"
+		},
+		"./sqlite": {
+			"import": "./dist/sqlite.js",
+			"require": "./dist/sqlite.cjs",
+			"types": "./dist/sqlite.d.ts"
+		},
+		"./standard": {
+			"import": "./dist/standard.js",
+			"require": "./dist/standard.cjs",
+			"types": "./dist/standard.d.ts"
+		}
+	},
 	"main": "./dist/main.js",
 	"module": "./dist/main.js",
-	"types": "./dist/index.d.ts",
+	"types": "./dist/main.d.ts",
 	"files": [
 		"dist"
 	],

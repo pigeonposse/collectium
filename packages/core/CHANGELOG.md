@@ -1,5 +1,11 @@
 # @collectium/core
 
+## 0.2.2
+
+### Patch Changes
+
+- add api feats
+
 ## 0.2.1
 
 ### Patch Changes

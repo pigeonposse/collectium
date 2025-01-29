@@ -25,8 +25,13 @@ export default defineConfig( {
 		ssr : true,
 		target,
 		lib : {
-			entry   : [ 'src/main' ],
-			formats : [ 'es' ],
+			entry : [
+				'src/main',
+				'src/local',
+				'src/sqlite',
+				'src/standard',
+			],
+			formats : [ 'es', 'cjs' ],
 		},
 	},
 	plugins : [ dts( { rollupTypes: true } ), devServer( { entry: 'examples/app' } ) ],

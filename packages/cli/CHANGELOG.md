@@ -1,5 +1,15 @@
 # @collectium/cli
 
+## 0.2.2
+
+### Patch Changes
+
+- add api feats
+
+- Updated dependencies []:
+  - @collectium/check@0.2.2
+  - @collectium/core@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes
