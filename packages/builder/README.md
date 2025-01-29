@@ -1,4 +1,4 @@
-# Collectium Api Package
+# Collectium Builder Package
 
 [![About Us](https://img.shields.io/badge/About%20Us-grey?style=for-the-badge&logoColor=white)](https://pigeonposse.com?popup=about)
 [![Donate](https://img.shields.io/badge/Donate-pink?style=for-the-badge&logoColor=white)](https://pigeonposse.com/?popup=donate)
@@ -28,15 +28,15 @@ Create API app for your Collectium Project
 ## 🔑 Installation
 
 ```bash 
-npm install @collectium/api
+npm install @collectium/builder
 # or
-pnpm install @collectium/api
+pnpm install @collectium/builder
 # or
-yarn add @collectium/api
+yarn add @collectium/builder
 # or
-bun add @collectium/api
+bun add @collectium/builder
 # or
-deno add @collectium/api
+deno add @collectium/builder
 ```
 
 ## ➕ More

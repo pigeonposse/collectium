@@ -66,7 +66,20 @@ const schema = ( z: Zod, opts: GitHubOpts ) => {
 
 	const fileContentRes = ( z: Zod ) => z.union( [ z.string(), z.object( {} ).passthrough().transform( val => val as object ) ] ).optional()
 
+	const content = opts.content
+		? objectMap( opts.content, d => {
+
+			if ( typeof d === 'string' || Array.isArray( d ) ) return fileContentRes( z )
+			else return d.schema?.( z ) || fileContentRes( z )
+
+		} )
+		: undefined
+
+	const contentSchema = content
+		? z.object( content )
+		: z.record( z.string(), fileContentRes( z ) )
 	return {
+
 		res : z.array( z.object( {
 			id       : z.string(),
 			url      : z.string(),
@@ -97,14 +110,7 @@ const schema = ( z: Zod, opts: GitHubOpts ) => {
 				url  : z.string().optional(),
 			} ).optional(),
 
-			content : opts.content
-				? z.object( objectMap( opts.content, d => {
-
-					if ( typeof d === 'string' || Array.isArray( d ) ) return fileContentRes( z )
-					else return d.schema?.( z ) || fileContentRes( z )
-
-				} ) ).optional()
-				: z.record( z.string(), fileContentRes( z ) ),
+			content  : contentSchema.optional(),
 			releases : z.array( z.object( {
 				url         : z.string(),
 				tag         : z.string(),
@@ -122,6 +128,7 @@ const schema = ( z: Zod, opts: GitHubOpts ) => {
 				} ) ).optional(),
 			} ) ).optional(),
 		} ) ) satisfies Zod.ZodSchema<RepoRes>,
+		content        : content,
 		fileContentRes : fileContentRes( z ),
 	}
 

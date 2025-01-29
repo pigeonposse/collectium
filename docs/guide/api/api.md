@@ -25,13 +25,8 @@ The application with methods to access stored data.
 #### Example
 
 ```ts
+import createApp from '@collectium/api/standard'
 const app = createApp();
-
-// Retrieve all stored data
-app.all.data().then(console.log);
-
-// Retrieve only GitHub data
-app.github.data().then(console.log);
 ```
 
 ***
@@ -68,6 +63,7 @@ If the path is not provided.
 #### Example
 
 ```ts
+import createApp from '@collectium/api/local'
 const app = createApp({ opts: { path: './data.json', loop: 300000 } });
 ```
 
@@ -105,5 +101,6 @@ If the database path is not provided.
 #### Example
 
 ```ts
+import createApp from '@collectium/api/sqlite'
 const app = createApp({ opts: { path: './database.db', loop: 300000 } });
 ```

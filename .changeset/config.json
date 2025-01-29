@@ -8,6 +8,10 @@
 	],
 	"commit": false,
 	"fixed": [
+		[
+			"@collectium/*",
+			"collectium"
+		]
 	],
 	"linked": [
 	],

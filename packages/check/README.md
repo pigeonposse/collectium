@@ -42,9 +42,10 @@ deno add @collectium/check
 ## ➕ More
 
 - 🌞 [Core](https://collectium.pigeonposse.com/guide/core)
-- [Check](https://collectium.pigeonposse.com/guide/check)
 - 📖 [Api](https://collectium.pigeonposse.com/guide/api)
 - 🔢 [Cli](https://collectium.pigeonposse.com/guide/cli)
+- [Builder](https://collectium.pigeonposse.com/guide/builder)
+- [Check](https://collectium.pigeonposse.com/guide/check)
 - [Lib](https://collectium.pigeonposse.com/guide/lib)
 - 💾 [Preset](https://collectium.pigeonposse.com/guide/preset)
   - [Github](https://collectium.pigeonposse.com/guide/preset/github)

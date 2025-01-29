@@ -12,7 +12,7 @@ import {
 
 import type { CustomOpts } from '../custom/main'
 
-export type CollectiumOpts = {
+type CollectiumOpts = {
 	/** Github options */
 	github? : GitHubOpts
 	/** Custom options */
@@ -21,11 +21,16 @@ export type CollectiumOpts = {
 	config? : CollectiumConfig
 }
 
-export type CollectiumRes = {
+type CollectiumRes = {
 	github? : Awaited<ReturnType<GitHub['get']>>
 	custom? : Awaited<ReturnType<Custom['get']>>
 	/** Execution time in miliseconds */
 	timeout : number
+}
+
+export type {
+	CollectiumOpts,
+	CollectiumRes,
 }
 
 export const defineConfig = ( v: CollectiumOpts ): CollectiumOpts => v
@@ -80,15 +85,14 @@ export class Collectium extends CollectiumSuperMininal {
 			timeout : this.z.number().describe( 'time in miliseconds' ),
 		} ) }
 
-		if ( this.config?.debug )
-			console.dir( {
-				github : objectMap( this.github.opts, d => ( {
-					...d,
-					token : !d.token || '***',
-				} ) ),
-				custom : this.custom.opts,
-				config : this.config,
-			}, { depth: Infinity } )
+		if ( this.config?.debug ) console.dir( {
+			github : objectMap( this.github.opts, d => ( {
+				...d,
+				token : !d.token || '***',
+			} ) ),
+			custom : this.custom.opts,
+			config : this.config,
+		}, { depth: Infinity } )
 
 	}
 

@@ -1,14 +1,14 @@
 {
-	"name": "@collectium/api",
+	"name": "@collectium/builder",
 	"version": "0.2.3",
 	"description": "Create API app for your Collectium Project",
 	"keywords": [
 		"pp",
 		"pigeonposse",
 		"collectium",
-		"api-rest"
+		"builder"
 	],
-	"homepage": "https://collectium.pigeonposse.com/guide/api",
+	"homepage": "https://collectium.pigeonposse.com/guide/builder",
 	"bugs": {
 		"url": "https://github.com/pigeonposse/collectium/issues",
 		"email": "dev@pigeonposse.com"
@@ -16,7 +16,7 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/pigeonposse/collectium",
-		"directory": "packages/api"
+		"directory": "packages/builder"
 	},
 	"funding": {
 		"type": "individual",
@@ -31,48 +31,46 @@
 	"type": "module",
 	"exports": {
 		".": {
-			"types": "./dist/main.d.ts",
-			"import": "./dist/main.js",
-			"require": "./dist/main.cjs"
+			"import": "./dist/main.mjs",
+			"require": "./dist/main.cjs",
+			"types": "./dist/main.d.ts"
 		},
-		"./local": {
-			"types": "./dist/local.d.ts",
-			"import": "./dist/local.js",
-			"require": "./dist/local.cjs"
+		"./api": {
+			"import": "./dist/api.mjs",
+			"require": "./dist/api.cjs",
+			"types": "./dist/api.d.ts"
 		},
-		"./sqlite": {
-			"types": "./dist/sqlite.d.ts",
-			"import": "./dist/sqlite.js",
-			"require": "./dist/sqlite.cjs"
+		"./bin": {
+			"import": "./dist/bin.mjs",
+			"require": "./dist/bin.cjs",
+			"types": "./dist/bin.d.ts"
 		},
-		"./standard": {
-			"types": "./dist/standard.d.ts",
-			"import": "./dist/standard.js",
-			"require": "./dist/standard.cjs"
+		"./schema": {
+			"import": "./dist/schema.mjs",
+			"require": "./dist/schema.cjs",
+			"types": "./dist/schema.d.ts"
 		}
 	},
-	"main": "./dist/main.js",
-	"module": "./dist/main.js",
+	"main": "./dist/main.mjs",
+	"module": "./dist/main.mjs",
 	"types": "./dist/main.d.ts",
 	"files": [
 		"dist"
 	],
 	"scripts": {
-		"build": "vite build",
-		"dev": "vite dev",
-		"dev-server": "tsx examples/server.ts",
+		"build": "unbuild",
+		"dev": "tsx examples/main.ts",
 		"test": "pnpm test:unit",
 		"test:unit": "vitest run src --passWithNoTests"
 	},
 	"dependencies": {
-		"backan": "0.2.0"
+		"@backan/builder": "0.2.0",
+		"zod-to-json-schema": "3.24.1"
 	},
 	"devDependencies": {
-		"@backan/server": "0.2.0",
-		"@hono/vite-dev-server": "0.18.1"
-	},
-	"peerDependencies": {
-		"@collectium/core": "workspace:*"
+		"@collectium/api": "workspace:*",
+		"@collectium/core": "workspace:*",
+		"@collectium/preset-github": "workspace:*"
 	},
 	"publishConfig": {
 		"access": "public",

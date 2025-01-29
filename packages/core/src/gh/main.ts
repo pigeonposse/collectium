@@ -47,24 +47,27 @@ export class GitHub extends CollectiumSuper<GitHubOpts, string> {
 		this.#part = mappedObject
 
 		const first = this.#part[Object.keys( this.#part )[0]]
-		this.schema = { res : this.z.object( {
-			data : this.z.record(
-				this.z.string(),
-				this.z.object( {
-					repo : first.repo.schema.res.optional(),
-					user : first.user.schema.res.optional(),
-				} ),
-			),
-			rate : this.z.union( [
-				this.z.object( {
-					limit     : this.z.number(),
-					remaining : this.z.number(),
-					reset     : this.z.number(),
-					used      : this.z.number(),
-				} ),
-				this.z.literal( false ),
-			] ),
-		} ) }
+		this.schema = {
+			content : first.repo.schema.content,
+			res     : this.z.object( {
+				data : this.z.record(
+					this.z.string(),
+					this.z.object( {
+						repo : first.repo.schema.res.optional(),
+						user : first.user.schema.res.optional(),
+					} ),
+				),
+				rate : this.z.union( [
+					this.z.object( {
+						limit     : this.z.number(),
+						remaining : this.z.number(),
+						reset     : this.z.number(),
+						used      : this.z.number(),
+					} ),
+					this.z.literal( false ),
+				] ),
+			} ),
+		}
 
 	}
 
