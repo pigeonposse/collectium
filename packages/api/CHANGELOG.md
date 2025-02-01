@@ -1,5 +1,14 @@
 # @collectium/api
 
+## 0.3.1
+
+### Patch Changes
+
+- Add support for get max 100 repos
+
+- Updated dependencies []:
+  - @collectium/core@0.3.1
+
 ## 0.3.0
 
 ### Minor Changes

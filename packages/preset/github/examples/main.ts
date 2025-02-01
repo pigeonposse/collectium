@@ -11,8 +11,8 @@ const opts  = githubPreset( {
 	userType   : 'org',
 	token,
 	configPath : [ '.pigeonposse' ],
-	repos      : [  'bepp', 'mautic-plugin-extra-tools' ],
-
+	// repos      : [  'bepp', 'mautic-plugin-extra-tools' ],
+	repos      : [ 'stylegpt' ],
 }, { config : {
 	debug     : false,
 	skipError : true,

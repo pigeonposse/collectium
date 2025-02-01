@@ -307,6 +307,8 @@ export class GitHubRepo extends GitHubSuper {
 			const response = await this.gh.request( 'GET /users/{username}/repos', {
 				username : this.opts.user,
 				headers  : this.opts.requestHeaders,
+				// eslint-disable-next-line camelcase
+				per_page : 100,
 			} )
 
 			const repoIDs    = response.data.map( d => d.name )
