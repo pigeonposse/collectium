@@ -10,10 +10,13 @@ type ExtractObj<T> = T extends Record<string, unknown> ? T : never
 type Zod = Parameters<NonNullable<ExtractObj<ExtractObj<GithubOpts['content']>[number]>['schema']>>[0]
 type ConfigType = Zod.infer<ReturnType<typeof configSchema>>
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Any = any
+
 const configSchema = ( z: Zod ) => z.object( { web : z.record(
-	z.string(),
+	z.string().describe( 'Project ID' ),
 	z.object( {
-		name : z.string().optional(),
+		name : z.string().optional().describe( 'Project name.' ),
 		type : z.array( z.enum( [
 			'library',
 			'cli',
@@ -54,7 +57,7 @@ const configSchema = ( z: Zod ) => z.object( { web : z.record(
 			'android-app',
 			// general
 			'software',
-		] ) ).default( [ 'library' ] ),
+		] ) ).default( [ 'library' ] ).describe( 'Type of project.' ),
 		status : z.enum( [
 			'idea',
 			'development',
@@ -63,16 +66,20 @@ const configSchema = ( z: Zod ) => z.object( { web : z.record(
 			'beta',
 			'active',
 			'archived',
-		] ).default( 'active' ),
-		version  : z.string().optional(),
-		desc     : z.string().optional(),
-		homepage : z.string().url().optional(),
-		docs     : z.string().url().optional(),
-		license  : z.string().url().optional(),
-		logo     : z.string().url().optional(),
-		banner   : z.string().url().optional(),
-	} ),
-) } ).optional()
+		] ).default( 'active' ).describe( 'Current project status.' ),
+		version  : z.string().optional().describe( 'Project version.' ),
+		desc     : z.string().optional().describe( 'Project description.' ),
+		homepage : z.string().url().optional().describe( 'Homepage URL' ),
+		docs     : z.string().url().optional().describe( 'Documentation URL.' ),
+		license  : z.object( {
+			name : z.string().optional().describe( 'License name.' ),
+			url  : z.string().url().optional().describe( 'License URL.' ),
+		} ).optional(),
+		logo   : z.string().url().optional().describe( 'Logo URL.' ),
+		banner : z.string().url().optional().describe( 'Banner URL.' ),
+	} ).strict()
+		.describe( 'Object with data for a specific project' ),
+).describe( 'Object to add projects designed to be displayed on the web' ) } ).optional()
 
 export const setGithubPreset = <ID extends string = string>(
 	data: Data & {
@@ -151,45 +158,66 @@ export const setGithubPreset = <ID extends string = string>(
 					input  : 'CODE_OF_CONDUCT.md',
 					schema : z => z.string().optional(),
 				},
+				'logo' : {
+					input  : [ 'docs/public/logo.png', 'docs/logo.png' ],
+					schema : z => z.string().optional(),
+				},
+				'banner' : {
+					input  : [ 'docs/public/banner.png', 'docs/banner.png' ],
+					schema : z => z.string().optional(),
+				},
 			},
 
 			hook : { afterRepo : ( { data } ) => {
 
 				if ( !data.content ) data.content = {}
 
-				if (
-					!data.content.config
-					&& data.content.package
-					&& ( typeof data.content.package === 'object' && 'name' in data.content.package && typeof data.content.package.name === 'string' )
+				const setString      = ( v: Any, d?: string ) => v && typeof v === 'string' ? v : d
+				const setStringArray = ( v: Any, d?: string[] ) => {
+
+					const res = v && Array.isArray( v )
+						? v.filter( c => typeof c === 'string' )
+						: d
+					return res && res.length ? res : undefined
+
+				}
+
+				if ( !data.content.config?.content
+					&& ( setString( data.content.package?.content?.name ) || setString( data.content.composer?.content?.name ) )
 				) {
 
-					const pkg      = data.content.package
-					const homepage = 'homepage' in pkg && typeof pkg.homepage === 'string' ? pkg.homepage : undefined
-					const desc     = 'description' in pkg && typeof pkg.description === 'string' ? pkg.description as string : undefined
+					const pkg      = data.content.package?.content || {}
+					const composer = data.content.composer?.content || {}
 
-					const config: ConfigType = { web : { [pkg.name as string] : {
-						name    : pkg.name as string,
+					const name     = ( setString( pkg.name ) || setString( composer.name ) ) as string
+					const desc     = setString( pkg.description ) || setString( composer.description )
+					const homepage = setString( pkg.homepage ) || setString( composer.homepage )
+
+					const config: ConfigType = { web : { [name] : {
+						name    : setString( pkg.extra?.productName, name ),
 						type    : [ 'library' ],
 						status  : 'active',
-						version : 'version' in pkg ? pkg.version as string : undefined,
+						version : setString( pkg.version ) || setString( composer.version ),
 						desc,
 						homepage,
-
-						// docs     : z.string().url().optional(),
-						// license  : z.string().url().optional(),
-						// logo     : z.string().url().optional(),
-						// banner   : z.string().url().optional(),
+						docs    : setString( pkg.extra?.docsURL ) || setString( pkg.extra?.docsUrl ),
+						logo    : setString( data.content.logo?.url ),
+						banner  : setString( data.content.banner?.url ),
 					} } }
+					const url                = setString( data.content.package?.url ) || setString( data.content.composer?.url )
 
-					data.content = {
+					if ( url ) data.content = {
 						...data.content,
-						config : config,
+						config : {
+							url     : url,
+							content : config,
+						},
 					}
-					if ( !data.license )
-						data.license = { key: 'license' in pkg && typeof pkg.license === 'string' ? pkg.license  : undefined }
+
+					if ( !data.license ) data.license = { key: setString( pkg.license ) || setString( composer.license ) }
 					if ( !data.homepage ) data.homepage = homepage
 					if ( !data.desc ) data.desc = desc
-					if ( !data.tags ) data.tags = 'keywords' in pkg ? pkg.keywords as string[] : undefined
+					if ( !data.tags ) data.tags = setStringArray( pkg.keywords ) || setStringArray( composer.keywords )
 
 				}
 

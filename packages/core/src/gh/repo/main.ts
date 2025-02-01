@@ -5,9 +5,11 @@ import { objectMap }   from '../../_shared/obj'
 import { getContent }  from '../../_shared/string'
 import { GitHubSuper } from '../_super/main'
 
+import type { Any } from '../../_shared/types'
 import type {
 	ZodInfer,
 	Zod,
+	ZodAnyType,
 } from '../../_shared/validate'
 import type { GitHubOpts } from '../_super/types'
 
@@ -42,7 +44,10 @@ export type RepoRes = {
 		url?  : string
 	}
 
-	content? : Record<string, unknown>
+	content? : Record<string, {
+		url      : string
+		content? : Any
+	}>
 
 	releases?: {
 		url         : string
@@ -64,22 +69,24 @@ export type RepoRes = {
 
 const schema = ( z: Zod, opts: GitHubOpts ) => {
 
-	const fileContentRes = ( z: Zod ) => z.union( [ z.string(), z.object( {} ).passthrough().transform( val => val as object ) ] ).optional()
-
+	const getFile = <T extends ZodAnyType>( content?: T ) => z.object( {
+		url     : z.string(),
+		content : content || z.union( [ z.string(), z.object( {} ).passthrough().transform( val => val as object ) ] ).optional(),
+	} )
 	const content = opts.content
 		? objectMap( opts.content, d => {
 
-			if ( typeof d === 'string' || Array.isArray( d ) ) return fileContentRes( z )
-			else return d.schema?.( z ) || fileContentRes( z )
+			if ( typeof d === 'string' || Array.isArray( d ) ) return getFile( )
+			else return getFile( d.schema?.( z ) || undefined )
 
 		} )
 		: undefined
 
 	const contentSchema = content
 		? z.object( content )
-		: z.record( z.string(), fileContentRes( z ) )
-	return {
+		: z.record( z.string(), getFile( ) )
 
+	return {
 		res : z.array( z.object( {
 			id       : z.string(),
 			url      : z.string(),
@@ -129,7 +136,7 @@ const schema = ( z: Zod, opts: GitHubOpts ) => {
 			} ) ).optional(),
 		} ) ) satisfies Zod.ZodSchema<RepoRes>,
 		content        : content,
-		fileContentRes : fileContentRes( z ),
+		fileContentRes : getFile( ).optional(),
 	}
 
 }
@@ -225,20 +232,6 @@ export class GitHubRepo extends GitHubSuper {
 
 	}
 
-	// async existsContents( repo: string ) {
-
-	// 	// https://api.github.com/repos/pigeonposse/bepp/contents
-
-	// 	const contents = await this.gh.request( 'GET /repos/{owner}/{repo}/contents', {
-	// 		owner   : this.opts.user,
-	// 		repo,
-	// 		headers : this.opts.requestHeaders,
-	// 	} )
-	// 	console.log( contents.data )
-	// 	throw Error( '' )
-
-	// }
-
 	async getContent( repo: string ): Promise<RepoContentRes> {
 
 		const res : RepoContentRes = {}
@@ -261,19 +254,26 @@ export class GitHubRepo extends GitHubSuper {
 
 					if ( res[key] ) continue
 
-					let content = await this.geFileContent( repo, path )
+					const data = await this.geFileContent( repo, path )
+
+					if ( !data ) continue
 
 					const resOn = await this.opts?.hook?.onContent?.( {
-						opts : this.opts,
-						path : path,
-						id   : key,
-						content,
+						opts    : this.opts,
+						path    : path,
+						id      : key,
+						url     : data.url,
+						content : data.content,
 					} )
 
-					content = resOn ? resOn : content
+					let content = resOn ? resOn : data.content
 
-					if ( schema ) res[key] = await this.validateSchema( schema, content )
-					else res[key] = content
+					if ( schema ) content = await this.validateSchema( schema, content )
+
+					res[key] = {
+						url : data.url,
+						content,
+					}
 
 				}
 
@@ -390,11 +390,14 @@ export class GitHubRepo extends GitHubSuper {
 
 			if ( !res || !res.data || !( 'content' in res.data ) ) return undefined
 
-			const text = atob( res.data.content )
+			const text = Buffer.from( res.data.content, 'base64' ).toString( 'utf-8' )
 
 			const content = await getContent( text )
 
-			if ( content ) return content
+			if ( content && res.data.download_url ) return {
+				url : res.data.download_url,
+				content,
+			}
 
 			return undefined
 

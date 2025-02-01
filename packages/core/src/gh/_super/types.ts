@@ -85,6 +85,10 @@ export type GitHubOpts = {
 			 */
 			path    : string
 			/**
+			 * URL Content
+			 */
+			url     : string | undefined
+			/**
 			 * File Content
 			 */
 			content : Content

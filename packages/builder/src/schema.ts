@@ -35,7 +35,7 @@ export const buildSchema = async ( {
 
 		for ( const [ k, v ] of Object.entries( zodSchemas ) ) {
 
-			const jsonSchema = zodToJsonSchema( v, { errorMessages: true } )
+			const jsonSchema = zodToJsonSchema( v.shape.content, { errorMessages: true } )
 			const file       = join( output, k + '.json' )
 
 			await writeJSON(

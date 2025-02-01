@@ -1,5 +1,16 @@
 # @collectium/api
 
+## 0.3.0
+
+### Minor Changes
+
+- Change content response type, add url to content response, fix some issues
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @collectium/core@1.0.0
+
 ## 0.2.3
 
 ### Patch Changes

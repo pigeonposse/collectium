@@ -125,32 +125,3 @@ export const getContentFrom =  async <Obj extends object = object>( value: strin
 	return await getContent<Obj>( res )
 
 }
-
-// GET CONTENT FRO SCHEMA:
-//////////////////////////////////////////////////////
-// const getSchema = ( v:Any ) => {
-
-// 	try {
-
-// 		return v.paths?.['/all'].get.responses[200].content['application/json']['schema'] as Content
-
-// 	}
-// 	catch ( e ) {
-
-// 		throw new Error( `Error returning schema from content value: ${e instanceof Error ? e.message : e}` )
-
-// 	}
-
-// }
-
-// if ( typeof this.#opts === 'object' && 'github' in this.#opts ) return this.#opts.github?.[id].content
-// else if ( typeof this.#opts === 'object' && 'openapi' in this.#opts ) return getSchema( this.#opts )
-// else if ( typeof this.#opts === 'string' ) {
-
-// 	const content = getContentFrom( this.#opts )
-// 	if ( typeof content === 'string' ) throw new Error( `Options provided has incorrect type result: ${content}\nContent must be object type.` )
-// 	else if ( typeof content === 'object' && 'openapi' in content ) return getSchema( content )
-
-// }
-
-// return undefined

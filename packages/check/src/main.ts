@@ -31,7 +31,7 @@ export type CheckOpts = CollectiumOpts | CollectiumOptsPath
  * import { Checker } from '@collectium/check';
  *
  * const checker = new Checker("/path/to/config.js");
- * checker.run("config-file", { cwd: "/path/to/dir" });
+ * checker.run("config-key", { cwd: "/path/to/dir" });
  * @example
  * // Example usage with an options object:
  * import { Checker } from '@collectium/check';
@@ -40,7 +40,7 @@ export type CheckOpts = CollectiumOpts | CollectiumOptsPath
  *   github: [
  *     {
  *       content: {
- *         "config-file": {
+ *         "config-key": {
  *           input: ["configs/**\/*.json"],
  *           schema: (z) => z.object({
  *             name: z.string(),
@@ -53,7 +53,7 @@ export type CheckOpts = CollectiumOpts | CollectiumOptsPath
  * };
  *
  * const checker = new Checker(opts);
- * checker.run("config-file", { cwd: "/path/to/dir" });
+ * checker.run("config-key", { cwd: "/path/to/dir" });
  */
 export class Checker {
 
@@ -99,17 +99,20 @@ export class Checker {
 
 		for ( const key of Object.keys( readeadFiles ) ) {
 
-			const file   = readeadFiles[key]
+			const file = readeadFiles[key]
+
 			const isObj  = typeof file !== 'string' && !Array.isArray( file )
 			const input  = !isObj ? file : file.input
 			const paths  = typeof input === 'string' ? [ input ] : input
 			const schema = isObj ? await file.schema?.( z ) : undefined
+
 			if ( !schema ) {
 
 				console.log( this.#style.successMsg( key, 'Any schema provided' ) )
 				continue
 
 			}
+
 			const localPaths = await globby( paths, {
 				dot       : true,
 				onlyFiles : true,
@@ -119,7 +122,6 @@ export class Checker {
 			if ( localPaths.length === 0 ) {
 
 				await this.#validateSchema( schema, undefined, key )
-
 				continue
 
 			}
@@ -151,6 +153,7 @@ export class Checker {
 		console.log( this.#style.info( 'Path to check:', dir  ), '\n' )
 
 		const readeadFiles = await this.#getContent( id )
+
 		if ( !readeadFiles ) {
 
 			console.warn( this.#style.warn( 'Nothing to check' ) )

@@ -15,7 +15,7 @@ from either a configuration object or a configuration file path.
 import { Checker } from '@collectium/check';
 
 const checker = new Checker("/path/to/config.js");
-checker.run("config-file", { cwd: "/path/to/dir" });
+checker.run("config-key", { cwd: "/path/to/dir" });
 ```
 
 ```ts
@@ -26,7 +26,7 @@ const opts = {
   github: [
     {
       content: {
-        "config-file": {
+        "config-key": {
           input: ["configs/**/*.json"],
           schema: (z) => z.object({
             name: z.string(),
@@ -39,7 +39,7 @@ const opts = {
 };
 
 const checker = new Checker(opts);
-checker.run("config-file", { cwd: "/path/to/dir" });
+checker.run("config-key", { cwd: "/path/to/dir" });
 ```
 
 #### Constructors

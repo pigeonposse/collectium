@@ -43,9 +43,9 @@ deno add collectium
 
 - 🌞 [Core](https://collectium.pigeonposse.com/guide/core)
 - 📖 [Api](https://collectium.pigeonposse.com/guide/api)
-- 🔢 [Cli](https://collectium.pigeonposse.com/guide/cli)
 - [Builder](https://collectium.pigeonposse.com/guide/builder)
 - [Check](https://collectium.pigeonposse.com/guide/check)
+- 🔢 [Cli](https://collectium.pigeonposse.com/guide/cli)
 - [Lib](https://collectium.pigeonposse.com/guide/lib)
 - 💾 [Preset](https://collectium.pigeonposse.com/guide/preset)
   - [Github](https://collectium.pigeonposse.com/guide/preset/github)

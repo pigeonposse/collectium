@@ -10,7 +10,25 @@ const collectium = new Collectium( {
 		branch   : 'main',
 		userType : 'org',
 		token,
-		repos    : [ '.github' ],
+		repos    : [ 'bepp' ],
+		content  : {
+			package : {
+				input  : 'package.json',
+				schema : z => z.object( {} ).passthrough().optional(),
+			},
+			composer : {
+				input  : 'composer.json',
+				schema : z => z.object( {} ).passthrough().optional(),
+			},
+			readme : {
+				input  : 'README.md',
+				schema : z => z.string(),
+			},
+			logo : {
+				input  : 'docs/public/logo.png',
+				schema : z => z.string(),
+			},
+		},
 	} },
 	config : {
 		skipError : true,

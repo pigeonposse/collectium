@@ -5,11 +5,10 @@ import setGithubPreset from '@collectium/preset-github'
 import build from '../src/main'
 
 const collectium = new Collectium( setGithubPreset( {
-	user       : 'pigeonposse',
-	branch     : 'main',
-	userType   : 'org',
-	configPath : [ '.pigeonposse' ],
-	repos      : [ 'collectium' ],
+	user     : 'pigeonposse',
+	branch   : 'main',
+	userType : 'org',
+	repos    : [ 'collectium' ],
 
 } ) )
 

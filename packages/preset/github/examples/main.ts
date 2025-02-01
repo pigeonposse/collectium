@@ -11,10 +11,10 @@ const opts  = githubPreset( {
 	userType   : 'org',
 	token,
 	configPath : [ '.pigeonposse' ],
-	repos      : [ 'collectium' ],
+	repos      : [  'bepp', 'mautic-plugin-extra-tools' ],
 
 }, { config : {
-	debug     : true,
+	debug     : false,
 	skipError : true,
 	skipWarn  : true,
 } } )
