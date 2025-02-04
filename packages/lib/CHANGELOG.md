@@ -1,5 +1,16 @@
 # collectium
 
+## 0.3.2
+
+### Patch Changes
+
+- up preset
+
+- Updated dependencies []:
+  - @collectium/check@0.3.2
+  - @collectium/cli@0.3.2
+  - @collectium/core@0.3.2
+
 ## 0.3.1
 
 ### Patch Changes

@@ -168,62 +168,74 @@ export const setGithubPreset = <ID extends string = string>(
 				},
 			},
 
-			hook : { afterRepo : ( { data } ) => {
+			hook : {
+				onContent : ( {
+					path, content, url,
+				} ) => {
 
-				if ( !data.content ) data.content = {}
+					if ( path.endsWith( '.png' ) && content )
+						return url
 
-				const setString      = ( v: Any, d?: string ) => v && typeof v === 'string' ? v : d
-				const setStringArray = ( v: Any, d?: string[] ) => {
+					return content
 
-					const res = v && Array.isArray( v )
-						? v.filter( c => typeof c === 'string' )
-						: d
-					return res && res.length ? res : undefined
+				},
+				afterRepo : ( { data } ) => {
 
-				}
+					if ( !data.content ) data.content = {}
 
-				if ( !data.content.config?.content
-					&& ( setString( data.content.package?.content?.name ) || setString( data.content.composer?.content?.name ) )
-				) {
+					const setString      = ( v: Any, d?: string ) => v && typeof v === 'string' ? v : d
+					const setStringArray = ( v: Any, d?: string[] ) => {
 
-					const pkg      = data.content.package?.content || {}
-					const composer = data.content.composer?.content || {}
+						const res = v && Array.isArray( v )
+							? v.filter( c => typeof c === 'string' )
+							: d
+						return res && res.length ? res : undefined
 
-					const name     = ( setString( pkg.name ) || setString( composer.name ) ) as string
-					const desc     = setString( pkg.description ) || setString( composer.description )
-					const homepage = setString( pkg.homepage ) || setString( composer.homepage )
-
-					const config: ConfigType = { web : { [name] : {
-						name    : setString( pkg.extra?.productName, name ),
-						type    : [ 'library' ],
-						status  : 'active',
-						version : setString( pkg.version ) || setString( composer.version ),
-						desc,
-						homepage,
-						docs    : setString( pkg.extra?.docsURL ) || setString( pkg.extra?.docsUrl ),
-						logo    : setString( data.content.logo?.url ),
-						banner  : setString( data.content.banner?.url ),
-					} } }
-					const url                = setString( data.content.package?.url ) || setString( data.content.composer?.url )
-
-					if ( url ) data.content = {
-						...data.content,
-						config : {
-							url     : url,
-							content : config,
-						},
 					}
 
-					if ( !data.license ) data.license = { key: setString( pkg.license ) || setString( composer.license ) }
-					if ( !data.homepage ) data.homepage = homepage
-					if ( !data.desc ) data.desc = desc
-					if ( !data.tags ) data.tags = setStringArray( pkg.keywords ) || setStringArray( composer.keywords )
+					if ( !data.content.config?.content
+						&& ( setString( data.content.package?.content?.name ) || setString( data.content.composer?.content?.name ) )
+					) {
 
-				}
+						const pkg      = data.content.package?.content || {}
+						const composer = data.content.composer?.content || {}
 
-				return data
+						const name     = ( setString( pkg.name ) || setString( composer.name ) ) as string
+						const desc     = setString( pkg.description ) || setString( composer.description )
+						const homepage = setString( pkg.homepage ) || setString( composer.homepage )
 
-			} },
+						const config: ConfigType = { web : { [name] : {
+							name    : setString( pkg.extra?.productName, name ),
+							type    : [ 'library' ],
+							status  : 'active',
+							version : setString( pkg.version ) || setString( composer.version ),
+							desc,
+							homepage,
+							docs    : setString( pkg.extra?.docsURL ) || setString( pkg.extra?.docsUrl ),
+							logo    : setString( data.content.logo?.url ),
+							banner  : setString( data.content.banner?.url ),
+						} } }
+						const url                = setString( data.content.package?.url ) || setString( data.content.composer?.url )
+
+						if ( url ) data.content = {
+							...data.content,
+							config : {
+								url     : url,
+								content : config,
+							},
+						}
+
+						if ( !data.license ) data.license = { key: setString( pkg.license ) || setString( composer.license ) }
+						if ( !data.homepage ) data.homepage = homepage
+						if ( !data.desc ) data.desc = desc
+						if ( !data.tags ) data.tags = setStringArray( pkg.keywords ) || setStringArray( composer.keywords )
+
+					}
+
+					return data
+
+				},
+			},
 
 		} },
 	}

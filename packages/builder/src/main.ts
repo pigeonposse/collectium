@@ -37,31 +37,20 @@ export const build = async ( data: BuildParams ): Promise<void> => {
 
 	const output = data.output || './build'
 
-	if ( data.schema ) {
+	if ( data.schema ) await buildSchema( {
+		...data.schema,
+		output : join( output, 'schema' ),
+	} )
 
-		await buildSchema( {
-			...data.schema,
-			output : join( output, 'schema' ),
-		} )
+	if ( data.api ) await buildApi( {
+		...data.api,
+		output : join( output, 'api' ),
+	} )
 
-	}
-
-	if ( data.api ) {
-
-		await buildApi( {
-			...data.api,
-			output : join( output, 'api' ),
-		} )
-
-	}
-	if ( data.bin ) {
-
-		await buildBin( {
-			...data.bin,
-			output : join( output ),
-		} )
-
-	}
+	if ( data.bin ) await buildBin( {
+		...data.bin,
+		output : join( output ),
+	} )
 
 }
 
