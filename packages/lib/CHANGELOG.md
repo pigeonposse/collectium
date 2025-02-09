@@ -1,5 +1,16 @@
 # collectium
 
+## 0.3.4
+
+### Patch Changes
+
+- prevent taking user repos when it is an org
+
+- Updated dependencies []:
+  - @collectium/core@0.3.4
+  - @collectium/check@0.3.4
+  - @collectium/cli@0.3.4
+
 ## 0.3.3
 
 ### Patch Changes

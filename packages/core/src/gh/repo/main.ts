@@ -326,6 +326,7 @@ export class GitHubRepo extends GitHubSuper {
 			const repos = await Promise.all( response.data.map( async repo => {
 
 				if ( !reposMatch.includes( repo.name ) ) return undefined
+				if ( repo.owner.login !== this.opts.user && this.opts.userType === 'org' ) return undefined
 
 				const res = {
 					id       : repo.name,
