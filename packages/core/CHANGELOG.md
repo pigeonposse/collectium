@@ -1,5 +1,11 @@
 # @collectium/core
 
+## 0.3.3
+
+### Patch Changes
+
+- Add support for private repos
+
 ## 0.3.2
 
 ### Patch Changes

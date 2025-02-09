@@ -1,6 +1,6 @@
 {
 	"name": "@collectium/check",
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"description": "Check current repo for Collectium Project",
 	"keywords": [
 		"pp",

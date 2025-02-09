@@ -1,5 +1,15 @@
 # @collectium/cli
 
+## 0.3.3
+
+### Patch Changes
+
+- Add support for private repos
+
+- Updated dependencies []:
+  - @collectium/core@0.3.3
+  - @collectium/check@0.3.3
+
 ## 0.3.2
 
 ### Patch Changes

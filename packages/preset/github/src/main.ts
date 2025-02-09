@@ -57,6 +57,11 @@ const configSchema = ( z: Zod ) => z.object( { web : z.record(
 			'android-app',
 			// general
 			'software',
+			// ai
+			'ai',
+			'llm',
+			'bot',
+			'chat-bot',
 		] ) ).default( [ 'library' ] ).describe( 'Type of project.' ),
 		status : z.enum( [
 			'idea',
@@ -66,6 +71,7 @@ const configSchema = ( z: Zod ) => z.object( { web : z.record(
 			'beta',
 			'active',
 			'archived',
+			'abandoned',
 		] ).default( 'active' ).describe( 'Current project status.' ),
 		version  : z.string().optional().describe( 'Project version.' ),
 		desc     : z.string().optional().describe( 'Project description.' ),

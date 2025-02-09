@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 
 import { matcher } from 'matcher'
 
@@ -304,12 +305,20 @@ export class GitHubRepo extends GitHubSuper {
 
 			const pinnedRepos = await this.getPinnedRepos() || []
 
-			const response = await this.gh.request( 'GET /users/{username}/repos', {
-				username : this.opts.user,
-				headers  : this.opts.requestHeaders,
-				// eslint-disable-next-line camelcase
-				per_page : 100,
-			} )
+			const response = this.opts.token
+				// eslint-disable-next-line @stylistic/multiline-ternary
+				? await this.gh.request( 'GET /user/repos', {
+					headers  : this.opts.requestHeaders,
+					type     : 'all',
+					sort     : 'created',
+					per_page : 100,
+				} ) : await this.gh.request( 'GET /users/{username}/repos', {
+					username : this.opts.user,
+					headers  : this.opts.requestHeaders,
+					type     : 'all',
+					sort     : 'created',
+					per_page : 100,
+				} )
 
 			const repoIDs    = response.data.map( d => d.name )
 			const reposMatch = matcher( repoIDs, this.opts.repos )
@@ -346,7 +355,7 @@ export class GitHubRepo extends GitHubSuper {
 						? {
 							key  : repo.license.key,
 							name : repo.license.name,
-							url  : repo.license.url,
+							url  : repo.license.url || undefined,
 						}
 						: undefined,
 					content  : await this.getContent( repo.name ),
