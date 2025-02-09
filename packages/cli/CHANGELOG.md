@@ -1,5 +1,15 @@
 # @collectium/cli
 
+## 0.3.5
+
+### Patch Changes
+
+- Add support for not display config default in repos
+
+- Updated dependencies []:
+  - @collectium/check@0.3.5
+  - @collectium/core@0.3.5
+
 ## 0.3.4
 
 ### Patch Changes

@@ -190,6 +190,7 @@ export const setGithubPreset = <ID extends string = string>(
 					if ( !data.content ) data.content = {}
 
 					const setString      = ( v: Any, d?: string ) => v && typeof v === 'string' ? v : d
+					const setBool        = ( v: Any, d?: boolean ) => typeof v === 'boolean' ? v : d
 					const setStringArray = ( v: Any, d?: string[] ) => {
 
 						const res = v && Array.isArray( v )
@@ -205,6 +206,8 @@ export const setGithubPreset = <ID extends string = string>(
 
 						const pkg      = data.content.package?.content || {}
 						const composer = data.content.composer?.content || {}
+						const noConfig = setBool( pkg.extra?.config ) === false
+						if ( noConfig ) return data
 
 						const name     = ( setString( pkg.name ) || setString( composer.name ) ) as string
 						const desc     = setString( pkg.description ) || setString( composer.description )
@@ -221,7 +224,8 @@ export const setGithubPreset = <ID extends string = string>(
 							logo    : setString( data.content.logo?.url ),
 							banner  : setString( data.content.banner?.url ),
 						} } }
-						const url                = setString( data.content.package?.url ) || setString( data.content.composer?.url )
+
+						const url = setString( data.content.package?.url ) || setString( data.content.composer?.url )
 
 						if ( url ) data.content = {
 							...data.content,

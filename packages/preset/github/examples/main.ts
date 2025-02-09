@@ -12,7 +12,11 @@ const opts  = githubPreset( {
 	token,
 	configPath : [ '.pigeonposse' ],
 	// repos      : [  'bepp', 'mautic-plugin-extra-tools' ],
-	repos      : [ 'stylegpt', 'seldon' ],
+	repos      : [
+		'stylegpt',
+		'seldon',
+		'stylelint-config',
+	],
 }, { config : {
 	debug     : false,
 	skipError : true,

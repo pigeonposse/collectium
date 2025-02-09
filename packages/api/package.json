@@ -1,6 +1,6 @@
 {
 	"name": "@collectium/api",
-	"version": "0.3.4",
+	"version": "0.3.5",
 	"description": "Create API app for your Collectium Project",
 	"keywords": [
 		"pp",

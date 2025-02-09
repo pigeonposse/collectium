@@ -1,5 +1,11 @@
 # @collectium/core
 
+## 0.3.5
+
+### Patch Changes
+
+- Add support for not display config default in repos
+
 ## 0.3.4
 
 ### Patch Changes
