@@ -1,5 +1,15 @@
 # @collectium/cli
 
+## 0.3.6
+
+### Patch Changes
+
+- up logo and banner
+
+- Updated dependencies []:
+  - @collectium/check@0.3.6
+  - @collectium/core@0.3.6
+
 ## 0.3.5
 
 ### Patch Changes

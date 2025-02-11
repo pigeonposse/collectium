@@ -1,5 +1,11 @@
 # @collectium/builder
 
+## 0.3.6
+
+### Patch Changes
+
+- up logo and banner
+
 ## 0.3.5
 
 ### Patch Changes

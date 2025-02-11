@@ -37,6 +37,11 @@ export default defineConfig(
 					'/todo/'        : sidebar,
 					'/contributors' : sidebar,
 				},
+				css : `
+.VPImage.image-src {
+width: 100%;
+}
+				`,
 				autoSidebar : {
 					intro     : false,
 					reference : false,
