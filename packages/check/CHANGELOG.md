@@ -1,5 +1,11 @@
 # @collectium/check
 
+## 0.3.7
+
+### Patch Changes
+
+- add feats in github preset, fix [repo license url] in core
+
 ## 0.3.6
 
 ### Patch Changes

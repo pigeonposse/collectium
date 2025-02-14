@@ -23,8 +23,6 @@ Collect information from GitHub and other URLs in a completely customized way
 - [✨ About us](#-about-us)
 
 
-
-
 ## 🔑 Installation
 
 ```bash 

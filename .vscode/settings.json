@@ -10,7 +10,9 @@
 {
 	"files.autoSave": "onFocusChange",
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "explicit"
+		"source.fixAll": "explicit",
+		"source.fixAll.eslint": "explicit",
+		"source.fixAll.stylelint": "explicit"
 	},
 	"eslint.validate": [
 		"javascript",
@@ -23,5 +25,17 @@
 		"yaml",
 		"toml"
 	],
-	"javascript.updateImportsOnFileMove.enabled": "always"
+	"javascript.updateImportsOnFileMove.enabled": "always",
+	"[markdown]": {
+		"editor.formatOnSave": true,
+		"editor.formatOnPaste": true
+	},
+	"terminal.integrated.defaultProfile.linux": "zsh",
+	"terminal.integrated.profiles.linux": {
+		"zsh": {
+			"path": "/bin/zsh"
+		},
+	},
+	"editor.tabSize": 4,
+	"typescript.tsdk": "node_modules/typescript/lib",
 }

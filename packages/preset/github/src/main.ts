@@ -1,91 +1,15 @@
 
-import type { CollectiumOpts } from '@collectium/core'
+import {
+	configSchema,
+	configTags,
+} from './config'
 
-type GithubOpts = NonNullable<CollectiumOpts['github']>[number]
-type Data = Pick<
-	GithubOpts,
-	'user' | 'branch' | 'token' | 'userType' | 'repos' | 'hook' | 'releases'
->
-type ExtractObj<T> = T extends Record<string, unknown> ? T : never
-type Zod = Parameters<NonNullable<ExtractObj<ExtractObj<GithubOpts['content']>[number]>['schema']>>[0]
-type ConfigType = Zod.infer<ReturnType<typeof configSchema>>
+import type { ConfigType }     from './config'
+import type { Data }           from './types'
+import type { CollectiumOpts } from '@collectium/core'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Any = any
-
-const configSchema = ( z: Zod ) => z.object( { web : z.record(
-	z.string().describe( 'Project ID' ),
-	z.object( {
-		name : z.string().optional().describe( 'Project name.' ),
-		type : z.array( z.enum( [
-			'library',
-			'cli',
-			'api',
-			'api-rest',
-			'web',
-			'pwa',
-			'bin',
-			// game
-			'browser-game',
-			// plugin
-			'plugin',
-			'wp-plugin',
-			'mautic-plugin',
-			// theme
-			'theme',
-			'wp-theme',
-			'mautic-theme',
-			// browser
-			'browser-extension',
-			'chrome-extension',
-			'chromium-extension',
-			'firefox-extension',
-			'safari-extension',
-			'edge-extension',
-			'brave-extension',
-			'opera-extension',
-			'operagx-extension',
-			'yandex-extension',
-			// desktop
-			'desktop-app',
-			'macos-app',
-			'linux-app',
-			'windows-app',
-			// mobile
-			'mobile-app',
-			'ios-app',
-			'android-app',
-			// general
-			'software',
-			// ai
-			'ai',
-			'llm',
-			'bot',
-			'chat-bot',
-		] ) ).default( [ 'library' ] ).describe( 'Type of project.' ),
-		status : z.enum( [
-			'idea',
-			'development',
-			'coming-soon',
-			'alpha',
-			'beta',
-			'active',
-			'archived',
-			'abandoned',
-		] ).default( 'active' ).describe( 'Current project status.' ),
-		version  : z.string().optional().describe( 'Project version.' ),
-		desc     : z.string().optional().describe( 'Project description.' ),
-		homepage : z.string().url().optional().describe( 'Homepage URL' ),
-		docs     : z.string().url().optional().describe( 'Documentation URL.' ),
-		license  : z.object( {
-			name : z.string().optional().describe( 'License name.' ),
-			url  : z.string().url().optional().describe( 'License URL.' ),
-		} ).optional(),
-		logo   : z.string().url().optional().describe( 'Logo URL.' ),
-		banner : z.string().url().optional().describe( 'Banner URL.' ),
-	} ).strict()
-		.describe( 'Object with data for a specific project' ),
-).describe( 'Object to add projects designed to be displayed on the web' ) } ).optional()
 
 export const setGithubPreset = <ID extends string = string>(
 	data: Data & {
@@ -102,6 +26,10 @@ export const setGithubPreset = <ID extends string = string>(
 		 * [`.${this.id || this.user}`]
 		 */
 		configPath? : string[]
+		/**
+		 * Add custom types in your Repo config
+		 */
+		customType? : string[]
 	},
 	opts: Omit<CollectiumOpts, 'github'> = { config : {
 		skipError : true,
@@ -112,6 +40,7 @@ export const setGithubPreset = <ID extends string = string>(
 	const {
 		id  = data.id || data.user,
 		configPath,
+		customType,
 		hook: _hook,
 		...rest
 	} = data
@@ -134,7 +63,7 @@ export const setGithubPreset = <ID extends string = string>(
 			content : {
 				'config' : {
 					input  : input,
-					schema : z => configSchema( z ),
+					schema : z => configSchema( z, customType ),
 				},
 				'package' : {
 					input  : 'package.json',
@@ -212,17 +141,33 @@ export const setGithubPreset = <ID extends string = string>(
 						const name     = ( setString( pkg.name ) || setString( composer.name ) ) as string
 						const desc     = setString( pkg.description ) || setString( composer.description )
 						const homepage = setString( pkg.homepage ) || setString( composer.homepage )
+						const getTypes = (): string[] | undefined => {
 
+							const types = setString( pkg.extra?.type ) ? [ setString( pkg.extra?.type ) ] : setStringArray( pkg.extra?.type )
+							if ( !types ) return
+							const validTypes = configTags( customType )
+							const isVaLid    = types.every( v => v && validTypes.includes( v ) )
+							if ( isVaLid ) return types.filter( d => typeof d === 'string' )
+
+						}
 						const config: ConfigType = { web : { [name] : {
-							name    : setString( pkg.extra?.productName, name ),
-							type    : [ 'library' ],
-							status  : 'active',
-							version : setString( pkg.version ) || setString( composer.version ),
+							name      : setString( pkg.extra?.productName, name ),
+							type      : getTypes() || [ 'library' ],
+							status    : 'active',
+							version   : setString( pkg.version ) || setString( composer.version ),
 							desc,
 							homepage,
-							docs    : setString( pkg.extra?.docsURL ) || setString( pkg.extra?.docsUrl ),
-							logo    : setString( data.content.logo?.url ),
-							banner  : setString( data.content.banner?.url ),
+							changelog : setString( pkg.extra?.changelogURL ) || setString( pkg.extra?.changelogUrl ),
+							docs      : setString( pkg.extra?.docsURL ) || setString( pkg.extra?.docsUrl ),
+							library   : setString( pkg.extra?.libraryURL ) || setString( pkg.extra?.libraryUrl ),
+							container : setString( pkg.extra?.containerURL ) || setString( pkg.extra?.containerUrl ),
+							services  : {
+								npm       : setString( pkg.extra?.npmURL ) || setString( pkg.extra?.npmUrl ),
+								jsr       : setString( pkg.extra?.jsrURL ) || setString( pkg.extra?.jsrUrl ),
+								dockerhub : setString( pkg.extra?.dockerhubURL ) || setString( pkg.extra?.dockerhubUrl ),
+							},
+							logo   : setString( data.content.logo?.url ),
+							banner : setString( data.content.banner?.url ),
 						} } }
 
 						const url = setString( data.content.package?.url ) || setString( data.content.composer?.url )

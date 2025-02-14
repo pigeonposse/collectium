@@ -2,16 +2,17 @@
 
 import { matcher } from 'matcher'
 
-import { objectMap }   from '../../_shared/obj'
-import { getContent }  from '../../_shared/string'
+import { objectMap }  from '../../_shared/obj'
+import { getContent } from '../../_shared/string'
+import {
+	type ZodInfer,
+	type Zod,
+	type ZodAnyType,
+	existsURL,
+} from '../../_shared/validate'
 import { GitHubSuper } from '../_super/main'
 
-import type { Any } from '../../_shared/types'
-import type {
-	ZodInfer,
-	Zod,
-	ZodAnyType,
-} from '../../_shared/validate'
+import type { Any }        from '../../_shared/types'
 import type { GitHubOpts } from '../_super/types'
 
 export type RepoRes = {
@@ -320,9 +321,26 @@ export class GitHubRepo extends GitHubSuper {
 					per_page : 100,
 				} )
 
-			const repoIDs    = response.data.map( d => d.name )
-			const reposMatch = matcher( repoIDs, this.opts.repos )
+			const repoIDs        = response.data.map( d => d.name )
+			const reposMatch     = matcher( repoIDs, this.opts.repos )
+			const existGHLicense = async ( k?:string ) => {
 
+				try {
+
+					if ( !k ) return
+					const url    = `https://choosealicense.com/licenses/${k}/`
+					const exists = await existsURL( url )
+					if ( exists ) return url
+					return
+
+				}
+				catch ( _e ) {
+
+					return
+
+				}
+
+			}
 			const repos = await Promise.all( response.data.map( async repo => {
 
 				if ( !reposMatch.includes( repo.name ) ) return undefined
@@ -356,7 +374,12 @@ export class GitHubRepo extends GitHubSuper {
 						? {
 							key  : repo.license.key,
 							name : repo.license.name,
-							url  : repo.license.url || undefined,
+							url  : ( 'html_url' in repo.license
+								? repo.license.html_url
+								: await existGHLicense( repo.license.key )
+							)
+							|| repo.license.url
+							|| undefined,
 						}
 						: undefined,
 					content  : await this.getContent( repo.name ),
