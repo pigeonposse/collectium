@@ -3,10 +3,10 @@
 	"version": "0.3.8",
 	"description": "Check current repo for Collectium Project",
 	"keywords": [
-		"pp",
-		"pigeonposse",
+		"checker",
 		"collectium",
-		"checker"
+		"pigeonposse",
+		"pp"
 	],
 	"homepage": "https://collectium.pigeonposse.com/guide/check",
 	"bugs": {

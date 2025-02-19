@@ -21,5 +21,6 @@ export default [
 		'**/CHANGELOG.md',
 		'**/README.md',
 		'./docs/index.md',
+		'**/docs/**/*',
 	] ),
 ]

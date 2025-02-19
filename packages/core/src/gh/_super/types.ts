@@ -113,6 +113,6 @@ export type GitHubOpts = {
 	 * @default
 	 * const requestHeaders = { 'X-GitHub-Api-Version': '2022-11-28' }
 	 */
-	requestHeaders? : NonNullable<Parameters<Octokit['request']>[1] >['headers']
+	requestHeaders? : NonNullable<Parameters<Octokit['request']>[1]>['headers']
 }
 

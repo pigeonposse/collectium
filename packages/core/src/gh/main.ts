@@ -15,7 +15,7 @@ export class GitHub extends CollectiumSuper<GitHubOpts, string> {
 	#part: Record<string, {
 		repo : GitHubRepo
 		user : GitHubUser
-	} >
+	}>
 
 	schema
 	data : z.infer<GitHub['schema']['res']> | undefined

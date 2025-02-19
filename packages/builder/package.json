@@ -3,10 +3,10 @@
 	"version": "0.3.8",
 	"description": "Create API app for your Collectium Project",
 	"keywords": [
-		"pp",
-		"pigeonposse",
+		"builder",
 		"collectium",
-		"builder"
+		"pigeonposse",
+		"pp"
 	],
 	"homepage": "https://collectium.pigeonposse.com/guide/builder",
 	"bugs": {

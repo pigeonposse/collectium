@@ -3,10 +3,10 @@
 	"version": "0.3.8",
 	"description": "Collectium CLI",
 	"keywords": [
-		"pp",
-		"pigeonposse",
+		"cli",
 		"collectium",
-		"cli"
+		"pigeonposse",
+		"pp"
 	],
 	"homepage": "https://collectium.pigeonposse.com/guide/cli",
 	"bugs": {

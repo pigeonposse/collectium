@@ -3,9 +3,9 @@
 	"version": "0.3.8",
 	"description": "Github Preset for Collectium",
 	"keywords": [
-		"pp",
-		"pigeonposse",
 		"collectium",
+		"pigeonposse",
+		"pp",
 		"preset"
 	],
 	"homepage": "https://collectium.pigeonposse.com/guide/preset/github",
