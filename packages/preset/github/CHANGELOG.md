@@ -1,5 +1,14 @@
 # @collectium/preset-github
 
+## 0.3.8
+
+### Patch Changes
+
+- up deps
+
+- Updated dependencies []:
+  - @collectium/core@0.3.8
+
 ## 0.3.7
 
 ### Patch Changes

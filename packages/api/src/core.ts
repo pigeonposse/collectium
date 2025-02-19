@@ -57,7 +57,8 @@ class AppCore<Env extends object, Opts> {
 				path      : '/',
 				summary   : 'Get all data',
 				responses : {
-					200 : route.response.responseJSONSuccess( this.collectium.schema.res ),
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					200 : route.response.responseJSONSuccess( this.collectium.schema.res as any ),
 					400 : route.response.responseJSONError400,
 					500 : route.response.responseJSONError500,
 				},
@@ -135,7 +136,8 @@ class AppCore<Env extends object, Opts> {
 				path      : '/',
 				summary   : 'Get custom data',
 				responses : {
-					200 : route.response.responseJSONSuccess( this.collectium.custom.schema.res ),
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					200 : route.response.responseJSONSuccess( this.collectium.custom.schema.res as any ),
 					400 : route.response.responseJSONError400,
 					500 : route.response.responseJSONError500,
 				},

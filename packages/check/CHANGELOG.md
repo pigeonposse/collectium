@@ -1,5 +1,11 @@
 # @collectium/check
 
+## 0.3.8
+
+### Patch Changes
+
+- up deps
+
 ## 0.3.7
 
 ### Patch Changes

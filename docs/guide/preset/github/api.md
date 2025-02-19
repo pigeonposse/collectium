@@ -7,6 +7,7 @@
 ```ts
 function setGithubPreset<ID>(data: Data & {
   configPath: string[];
+  customType: string[];
   id: ID;
  }, opts: Omit<CollectiumOpts, "github">): CollectiumOpts
 ```
@@ -21,7 +22,7 @@ function setGithubPreset<ID>(data: Data & {
 
 | Parameter | Type |
 | ------ | ------ |
-| `data` | `Data` & \{ `configPath`: `string`[]; `id`: `ID`; \} |
+| `data` | `Data` & \{ `configPath`: `string`[]; `customType`: `string`[]; `id`: `ID`; \} |
 | `opts` | `Omit`\<`CollectiumOpts`, `"github"`\> |
 
 #### Returns

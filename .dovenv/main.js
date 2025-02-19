@@ -17,14 +17,23 @@ const ICON = {
 	EXAMPLES : '💡',
 	PRESET   : '💾',
 	CORE     : '🌞',
+	BUILDER  : '📦',
+	CHECKER  : '✅',
 }
 
 export default defineConfig(
 	pigeonposseMonorepoTheme( {
 		core,
-		docs : async config => {
+		docs : async utils => {
 
-			const sidebar = await getSidebar( config )
+			const sidebar = await getSidebar( {
+				utils,
+				opts : { emojis : {
+					check   : ICON.CHECKER,
+					builder : ICON.BUILDER,
+					lib     : ICON.LIB,
+				} },
+			} )
 
 			return {
 				vitepress : {
@@ -37,11 +46,6 @@ export default defineConfig(
 					'/todo/'        : sidebar,
 					'/contributors' : sidebar,
 				},
-				css : `
-.VPImage.image-src {
-width: 100%;
-}
-				`,
 				autoSidebar : {
 					intro     : false,
 					reference : false,
@@ -76,11 +80,11 @@ width: 100%;
 		repo : { commit : { scopes : [
 			{
 				value : 'packages',
-				desc  : '📦 All or some packages',
+				desc  : ICON.BUILDER + ' All or some packages',
 			},
 			{
 				value : 'core',
-				desc  : '🌞 Core package',
+				desc  : ICON.CORE + ' Core package',
 			},
 			{
 				value : 'env',
@@ -94,44 +98,47 @@ width: 100%;
 	} ),
 	{ custom : { predocs : {
 		desc : 'Build env documentation',
-		fn   : async ( { config } ) => {
+		fn   : async ( { utils } ) => {
 
 			const predocs = new Predocs( {
-				index : {
-					noFeatures : true,
-					custom     : { features : [
-						{
-							title   : 'Get started',
-							icon    : ICON.START,
-							details : 'Start your project now',
-							link    : '/guide',
-						},
-						{
-							title   : 'Library',
-							icon    : ICON.LIB,
-							details : 'Check the documentation',
-							link    : '/guide/lib',
-						},
-						{
-							title   : 'REST API',
-							icon    : ICON.REST_API,
-							details : 'Check the Rest API documentation',
-							link    : '/guide/api',
-						},
-						{
-							title   : 'Presets',
-							icon    : ICON.PRESET,
-							details : 'Check the Library presets',
-							link    : '/guide/preset',
-						},
+				opts : {
+					index : {
+						noFeatures : true,
+						custom     : { features : [
+							{
+								title   : 'Get started',
+								icon    : ICON.START,
+								details : 'Start your project now',
+								link    : '/guide',
+							},
+							{
+								title   : 'Library',
+								icon    : ICON.LIB,
+								details : 'Check the documentation',
+								link    : '/guide/lib',
+							},
+							{
+								title   : 'REST API',
+								icon    : ICON.REST_API,
+								details : 'Check the Rest API documentation',
+								link    : '/guide/api',
+							},
+							{
+								title   : 'Presets',
+								icon    : ICON.PRESET,
+								details : 'Check the Library presets',
+								link    : '/guide/preset',
+							},
+						] },
+					},
+					guideSection : { none : [
+						'config',
+						'plugin',
+						'theme',
 					] },
 				},
-				guideSection : { none : [
-					'config',
-					'plugin',
-					'theme',
-				] },
-			}, config )
+				utils,
+			} )
 
 			await predocs.run()
 

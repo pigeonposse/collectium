@@ -1,5 +1,15 @@
 # @collectium/cli
 
+## 0.3.8
+
+### Patch Changes
+
+- up deps
+
+- Updated dependencies []:
+  - @collectium/check@0.3.8
+  - @collectium/core@0.3.8
+
 ## 0.3.7
 
 ### Patch Changes
