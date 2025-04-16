@@ -9,6 +9,7 @@ const collectium = new Collectium( {
 		user     : 'pigeonposse',
 		branch   : 'main',
 		userType : 'org',
+		// releases : 'no-assets',
 		token,
 		repos    : [ 'bepp' ],
 		content  : {
@@ -38,4 +39,4 @@ const collectium = new Collectium( {
 
 const data = await collectium.get()
 
-console.dir( data, { depth: Infinity } )
+console.dir( data, { depth: 6 } )

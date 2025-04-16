@@ -1,6 +1,6 @@
 {
 	"name": "@collectium/preset-github",
-	"version": "0.3.8",
+	"version": "0.3.9",
 	"description": "Github Preset for Collectium",
 	"keywords": [
 		"collectium",

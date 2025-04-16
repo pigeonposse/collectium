@@ -1,6 +1,5 @@
 /* eslint-disable @stylistic/object-curly-newline */
-import { Route } from 'backan'
-import { App }   from 'backan'
+import { App } from 'backan'
 
 import {
 	version,
@@ -49,18 +48,17 @@ class AppCore<Env extends object, Opts> {
 
 		const exists = this.#route.all.validate ? this.#route.all.validate() : true
 		if ( !exists ) return
-		const route = new Route<Env, 'all'>( { path: 'all' } )
 
-		route.add(
+		this.app.add(
 			{
 				method    : 'get',
-				path      : '/',
+				path      : '/all',
 				summary   : 'Get all data',
 				responses : {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					200 : route.response.responseJSONSuccess( this.collectium.schema.res as any ),
-					400 : route.response.responseJSONError400,
-					500 : route.response.responseJSONError500,
+					200 : this.app.response.responseJSONSuccess( this.collectium.schema.res as any ),
+					400 : this.app.response.responseJSONError400,
+					500 : this.app.response.responseJSONError500,
 				},
 			},
 			async c => {
@@ -68,19 +66,17 @@ class AppCore<Env extends object, Opts> {
 				try {
 
 					const data = await this.#route.all.data( )
-					return route.response.addSuccessResponse( c, data )
+					return this.app.response.addSuccessResponse( c, data )
 
 				}
 				catch ( e ) {
 
-					return route.response.add500Error( c, e )
+					return this.app.response.add500Error( c, e )
 
 				}
 
 			},
 		)
-
-		this.app.addRoute( route )
 
 	}
 
@@ -89,17 +85,15 @@ class AppCore<Env extends object, Opts> {
 		const exists = this.#route.github.validate ? this.#route.github.validate() : true
 		if ( !exists ) return
 
-		const route = new Route<Env, 'github'>( { path: 'github'  } )
-
-		route.add(
+		this.app.add(
 			{
 				method    : 'get',
-				path      : '/',
+				path      : '/github',
 				summary   : 'Get GitHub data',
 				responses : {
-					200 : route.response.responseJSONSuccess( this.collectium.github.schema.res ),
-					400 : route.response.responseJSONError400,
-					500 : route.response.responseJSONError500,
+					200 : this.app.response.responseJSONSuccess( this.collectium.github.schema.res ),
+					400 : this.app.response.responseJSONError400,
+					500 : this.app.response.responseJSONError500,
 				},
 			},
 			async c => {
@@ -107,19 +101,17 @@ class AppCore<Env extends object, Opts> {
 				try {
 
 					const data = await this.#route.github.data( )
-					return route.response.addSuccessResponse( c, data )
+					return this.app.response.addSuccessResponse( c, data )
 
 				}
 				catch ( e ) {
 
-					return route.response.add500Error( c, e )
+					return this.app.response.add500Error( c, e )
 
 				}
 
 			},
 		)
-
-		this.app.addRoute( route )
 
 	}
 
@@ -128,18 +120,16 @@ class AppCore<Env extends object, Opts> {
 		const exists = this.#route.custom.validate ? this.#route.custom.validate() : true
 		if ( !exists ) return
 
-		const route = new Route<Env, 'custom'>( { path: 'custom' } )
-
-		route.add(
+		this.app.add(
 			{
 				method    : 'get',
-				path      : '/',
+				path      : '/custom',
 				summary   : 'Get custom data',
 				responses : {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					200 : route.response.responseJSONSuccess( this.collectium.custom.schema.res as any ),
-					400 : route.response.responseJSONError400,
-					500 : route.response.responseJSONError500,
+					200 : this.app.response.responseJSONSuccess( this.collectium.custom.schema.res as any ),
+					400 : this.app.response.responseJSONError400,
+					500 : this.app.response.responseJSONError500,
 				},
 			},
 			async c => {
@@ -148,19 +138,17 @@ class AppCore<Env extends object, Opts> {
 
 					const data = await this.#route.custom.data( )
 
-					return route.response.addSuccessResponse( c, data || {} )
+					return this.app.response.addSuccessResponse( c, data || {} )
 
 				}
 				catch ( e ) {
 
-					return route.response.add500Error( c, e )
+					return this.app.response.add500Error( c, e )
 
 				}
 
 			},
 		)
-
-		this.app.addRoute( route )
 
 	}
 

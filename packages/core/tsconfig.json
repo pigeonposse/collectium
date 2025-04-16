@@ -36,6 +36,23 @@
 		"allowSyntheticDefaultImports": true,
 		"outDir": "./dist",
 		"baseUrl": "./src",
+		"paths": {
+			"$shared/*": [
+				"./src/_shared/*"
+			],
+			"$lib/*": [
+				"./src/*"
+			],
+			"$gh/*": [
+				"./src/gh/*"
+			],
+			"$custom/*": [
+				"./src/custom/*"
+			],
+			"$all/*": [
+				"./src/all/*"
+			]
+		}
 	},
 	"include": [
 		"./src/",

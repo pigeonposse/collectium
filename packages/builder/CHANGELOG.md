@@ -1,5 +1,11 @@
 # @collectium/builder
 
+## 0.3.9
+
+### Patch Changes
+
+- up deps
+
 ## 0.3.8
 
 ### Patch Changes

@@ -17,6 +17,9 @@ web:
       - api
       - cli
       - bin
+      - js-library
+      - ts-library
+      - api-rest
     license:
       name: GPL-3.0
       url: https://github.com/pigeonposse/collectium/blob/main/LICENSE

@@ -5,26 +5,29 @@ import { Collectium } from '../../../core/src/main' // for dev
 import githubPreset   from '../src/main'
 
 const token = argv[2]
-const opts  = githubPreset( {
-	user       : 'pigeonposse',
-	branch     : 'main',
-	userType   : 'org',
-	token,
-	configPath : [ '.pigeonposse' ],
-	// repos      : [  'bepp', 'mautic-plugin-extra-tools' ],
-	repos      : [
-		'stylegpt',
-		'seldon',
-		'stylelint-config',
-	],
-}, { config : {
-	debug     : false,
-	skipError : true,
-	skipWarn  : true,
-} } )
+const opts  = githubPreset(
+	{
+		user       : 'pigeonposse',
+		branch     : 'main',
+		userType   : 'org',
+		token,
+		configPath : [ '.pigeonposse' ],
+		// repos      : [  'bepp', 'mautic-plugin-extra-tools' ],
+		repos      : [
+			'stylegpt',
+			'seldon',
+			'stylelint-config',
+		],
+	},
+	{ config : {
+		debug     : false,
+		skipError : true,
+		skipWarn  : true,
+	} },
+)
 
 const collectium = new Collectium( opts )
 
 const data = await collectium.get()
 
-console.dir( data, { depth: Infinity } )
+console.dir( data, { depth: 6 } )

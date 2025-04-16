@@ -1,5 +1,14 @@
 # @collectium/api
 
+## 0.3.9
+
+### Patch Changes
+
+- up deps
+
+- Updated dependencies []:
+  - @collectium/core@0.3.9
+
 ## 0.3.8
 
 ### Patch Changes

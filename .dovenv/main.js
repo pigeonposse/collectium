@@ -36,6 +36,7 @@ export default defineConfig(
 			} )
 
 			return {
+				llms      : { hostname: utils.pkg.extra?.docsURL },
 				vitepress : {
 					ignoreDeadLinks : true,
 					themeConfig     : { outline: { level: [ 2, 3 ] } },
