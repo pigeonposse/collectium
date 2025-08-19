@@ -61,26 +61,6 @@ jobs:
         env:
             GH_TOKEN: ${{ env.GITHUB_TOKEN }}
 
-    ############################### W ALL DEPENDENCESS ################################
-    #   - name: 🛠 Install System Dependencies for canvas and imagemin npm deps
-    #     run: |
-    #       sudo apt-get update
-    #       sudo apt-get install -y \
-    #         build-essential \
-    #         libcairo2-dev \
-    #         libpango1.0-dev \
-    #         libjpeg-dev \
-    #         libgif-dev \
-    #         librsvg2-dev \
-    #         libpng-dev \
-    #         zlib1g-dev \
-    #         libimagequant-dev \
-    #         nasm
-    #   - name: ⬇️📦 Install dependencies
-    #     run: |
-    #        export npm_config_build_from_source=false
-    #        pnpm install --no-frozen-lockfile
-
       - name: ⬇️📦 Install dependencies
         run: |
            export npm_config_build_from_source=false
@@ -180,33 +160,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: release-docs.yml
+          token: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
-
-    #   #########################################################################
-    #   # WEB
-    #   #########################################################################
-
-    #   - name: 📚🐙😺➡️ Call to workflow for deploy Web
-    #     if: steps.updated.outputs.core_version != ''
-    #     uses: benc-uk/workflow-dispatch@v1
-    #     with:
-    #       workflow: release-web.yml
-    #     continue-on-error: true
-
-    #   #########################################################################
-    #   # EXECUTABLES
-    #   #########################################################################
-    #   - name: Release binaries
-    #     uses: ncipollo/release-action@v1
-    #     if: steps.updated.outputs.core_version != ''
-    #     with:
-    #       tag: "${{ steps.updated.outputs.core_version }}"
-    #       draft: false
-    #       prerelease: false
-    #       allowUpdates: true
-    #       artifacts: "./build/compress/*.zip"
-    #     #   body: |
-    #     #     ${{steps.pkg.outputs.release_body}}
-    #       omitBodyDuringUpdate: true
 
 ###############################################################################
