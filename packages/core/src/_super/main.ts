@@ -41,7 +41,7 @@ export class CollectiumSuperMininal {
 	/**
 	 * Wrapped Zod instance with restricted methods
 	 */
-	protected z = z
+	protected z : typeof z = z
 
 	/**
 	 * Confugration
