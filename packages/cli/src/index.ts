@@ -19,6 +19,7 @@ import {
 	getCMD,
 	getFlagValue,
 } from './process'
+import { updater } from './updater'
 
 type Opts = Collectium['opts']
 
@@ -35,7 +36,8 @@ const OPTION = {
 	OUTPUT  : getFlagValue( 'output' ) || getFlagValue( 'o' ),
 }
 
-const run = async () => {
+export { updater }
+export const run = async () => {
 
 	try {
 
@@ -102,4 +104,3 @@ const run = async () => {
 
 }
 
-run()

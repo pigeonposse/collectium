@@ -37,6 +37,7 @@ export const defineConfig = ( v: CollectiumOpts ): CollectiumOpts => v
 
 /**
  * Create a Collectium instance
+ *
  * @see https://collectium.pigeonposse.com/guide/core
  * @example
  * import { argv } from 'node:process';

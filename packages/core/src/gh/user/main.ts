@@ -89,7 +89,7 @@ export class GitHubUser extends GitHubSuper {
 			if ( res.data ) return res.data.map( d => ( {
 				provider : d.url.startsWith( 'https://opencollective.com/' )
 					? 'opencollective'
-					:  d.url.startsWith( 'https://medium.com/' )
+					: d.url.startsWith( 'https://medium.com/' )
 						? 'medium'
 						: SOCIAL.includes( d.provider as Social ) ? d.provider as Social : 'custom',
 				url : d.url,
@@ -139,7 +139,7 @@ export class GitHubUser extends GitHubSuper {
 					url      : `https://polar.sh/${account}`,
 				} ) )
 			else if ( platform === 'patreon' )
-				return accounts.map( account =>  ( {
+				return accounts.map( account => ( {
 					provider : FUNDING_PROVIDER.patreon,
 					url      : `https://www.patreon.com/${account}`,
 				} ) )
@@ -155,7 +155,7 @@ export class GitHubUser extends GitHubSuper {
 
 		if ( typeof data !== 'object' || !Object.keys( data ).length ) return undefined
 
-		return  Object.entries( data )
+		return Object.entries( data )
 			.flatMap( ( [ k, v ] ) => transformPlatform( k, v ) )
 			.filter( d => d !== undefined )
 
@@ -253,7 +253,7 @@ export class GitHubUser extends GitHubSuper {
 
 			} )
 
-			return  await Promise.all( membersPromises )
+			return await Promise.all( membersPromises )
 
 		}
 		catch ( e ) {

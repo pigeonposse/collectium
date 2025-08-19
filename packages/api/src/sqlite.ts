@@ -4,12 +4,13 @@ import { createAppFn } from './core'
 
 /**
  * Creates an application that synchronizes data with an SQLite database.
- * @param {object} [data] - The configuration object.
- * @param {object} [data.opts] - The options for the application.
- * @param {string} [data.opts.path=':memory:'] - Path to the SQLite database file.
- * @param {number} [data.opts.loop=600000] - Time interval in milliseconds for saving data.
+ *
+ * @param   {object} [data]                      - The configuration object.
+ * @param   {object} [data.opts]                 - The options for the application.
+ * @param   {string} [data.opts.path=':memory:'] - Path to the SQLite database file.
+ * @param   {number} [data.opts.loop=600000]     - Time interval in milliseconds for saving data.
+ * @returns {object}                             The application with methods to access stored data.
  * @throws {Error} If the database path is not provided.
- * @returns {object} The application with methods to access stored data.
  * @example
  * import createApp from '@collectium/api/sqlite'
  * const app = createApp({ opts: { path: './database.db', loop: 300000 } });
@@ -17,11 +18,13 @@ import { createAppFn } from './core'
 export const createApp = createAppFn<{
 	/**
 	 * SQLITE file path
+	 *
 	 * @default ':memory:'
 	 */
 	path? : string
 	/**
 	 * Save interval in milliseconds
+	 *
 	 * @default 600000 // 10 min
 	 */
 	loop? : number

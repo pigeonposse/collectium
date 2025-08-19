@@ -7,9 +7,14 @@ import {
 	version,
 } from './const'
 
-const bold  = ( v:string ) => styleText( 'bold', v )
+export const dim = ( v:string ) => styleText( 'dim', v )
+export const bold = ( v:string ) => styleText( 'bold', v )
+export const italic = ( v:string ) => styleText( 'italic', v )
+export const cyan = ( v:string ) => styleText( 'cyan', v )
+export const green = ( v:string ) => styleText( 'green', v )
+
 const desc  = ( v:string ) => styleText( 'dim', v )
-const url   = ( v:string ) => styleText( 'magenta', styleText( 'italic',  styleText( 'underline', v ) ) )
+const url   = ( v:string ) => styleText( 'magenta', styleText( 'italic', styleText( 'underline', v ) ) )
 const title = ( v:string ) => styleText( 'bold', styleText( 'inverse', ' ' + v + ' ' ) )
 const cmds  = ( v:string, o?: string ) => styleText( 'green', v + ( o ? ' ' + desc( o ) : '' ) )
 const flag  = ( v:string ) => styleText( 'yellow', v )

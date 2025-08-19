@@ -7,7 +7,7 @@ import createLocalApp  from '../src/local'
 import createSqliteApp from '../src/sqlite'
 import createApp       from '../src/standard'
 
-const collectium = new Collectium(  {
+const collectium = new Collectium( {
 	github : { collective : {
 		user     : 'pigeonposse',
 		branch   : 'main',

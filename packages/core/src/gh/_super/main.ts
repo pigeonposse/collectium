@@ -7,7 +7,7 @@ import type { RequiredTypes } from '../../_shared/types'
 
 type GitHubOptsWithDefaults = RequiredTypes<
 	GitHubOpts,
-	'userType' | 'branch'  | 'content' | 'requestHeaders' | 'repos'
+	'userType' | 'branch' | 'content' | 'requestHeaders' | 'repos'
 >
 
 const ERROR_ID = {
@@ -21,7 +21,7 @@ const ERROR_ID = {
 export class GitHubSuper extends CollectiumSuper<
 	GitHubOptsWithDefaults,
 	typeof ERROR_ID[keyof typeof ERROR_ID]
->  {
+> {
 
 	protected gh
 

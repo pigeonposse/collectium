@@ -1,10 +1,11 @@
 /**
  * Catches errors from a promise and returns a tuple indicating success or failure.
- * @template T - The type of the resolved value of the promise.
- * @param {Promise<T>} promise - The promise to handle errors for.
- * @returns {Promise<[undefined, T] | [Error]>} A promise that resolves to a tuple.
- *          The tuple contains either `[undefined, T]` if the promise is resolved successfully,
- *          or `[Error]` if an error occurs.
+ *
+ * @template                                     T       - The type of the resolved value of the promise.
+ * @param    {Promise<T>}                        promise - The promise to handle errors for.
+ * @returns  {Promise<[undefined, T] | [Error]>}         A promise that resolves to a tuple.
+ *                                                       The tuple contains either `[undefined, T]` if the promise is resolved successfully,
+ *                                                       or `[Error]` if an error occurs.
  */
 export const catchError = async <T>( promise: Promise<T> ): Promise<[undefined, T] | [Error]> => {
 
@@ -16,10 +17,11 @@ export const catchError = async <T>( promise: Promise<T> ): Promise<[undefined, 
 
 /**
  * Catches errors from a synchronous function and returns a tuple indicating success or failure.
- * @template T - The type of the return value of the function.
- * @param {() => T} fn - The synchronous function to handle errors for.
- * @returns {[undefined, T] | [Error]} A tuple containing either `[undefined, T]` if the function executes successfully,
- *          or `[Error]` if an error occurs.
+ *
+ * @template                            T  - The type of the return value of the function.
+ * @param    {() => T}                  fn - The synchronous function to handle errors for.
+ * @returns  {[undefined, T] | [Error]}    A tuple containing either `[undefined, T]` if the function executes successfully,
+ *                                         or `[Error]` if an error occurs.
  */
 export const catchErrorSync = <T>( fn: () => T ): [undefined, T] | [Error] => {
 
@@ -45,6 +47,7 @@ export const catchErrorSync = <T>( fn: () => T ): [undefined, T] | [Error] => {
  * you to provide structured data along with the error message for improved error handling.
  *
  * ---
+ *
  * @template M - The type of the error message. Defaults to `string`.
  * @template D - The type of the additional data associated with the error. Defaults to `undefined`.
  * @example

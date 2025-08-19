@@ -13,6 +13,7 @@ import type { BuildSchemaParams } from './schema'
 type BuildParams = {
 	/**
 	 * Output dir
+	 *
 	 * @default './build'
 	 */
 	output? : string

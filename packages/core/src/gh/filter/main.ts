@@ -126,10 +126,11 @@ export class Sort<V extends SortValue = SortValue> {
 
 	/**
 	 * Sorts the value array based on the given sort type and options.
-	 * @template V
-	 * @param {SortType} type - The sort type from SORT_TYPE.
-	 * @param { SortOpts<V>} opts - The sort options containing the keys for sorting.
-	 * @returns {V} The sorted value array.
+	 *
+	 * @template                V
+	 * @param    {SortType}     type - The sort type from SORT_TYPE.
+	 * @param    { SortOpts<V>} opts - The sort options containing the keys for sorting.
+	 * @returns  {V}                 The sorted value array.
 	 */
 	by( type: SortType, opts: SortOpts<V> ): V {
 

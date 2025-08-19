@@ -4,14 +4,14 @@ import type { Any } from './types'
 
 export { z }
 export type ZodAnyType = z.ZodType<Any, Any, Any>
-export type ZodSchemaFor<T> = z.ZodType<T, z.ZodTypeDef, T>
 export type Zod = typeof z
 export type ZodInfer<T extends ZodAnyType> = z.infer<T>
 
 /**
  * Checks if an image URL exists.
- * @param {string} url - The image URL to check.
- * @returns {Promise<boolean>} - Returns a boolean indicating if the image exists.
+ *
+ * @param   {string}           url - The image URL to check.
+ * @returns {Promise<boolean>}     - Returns a boolean indicating if the image exists.
  */
 export const existsImageURL = async ( url: string ): Promise<boolean> => {
 
@@ -37,8 +37,9 @@ export const existsImageURL = async ( url: string ): Promise<boolean> => {
 
 /**
  * Checks if a URL is valid (exists).
- * @param {string} url - The URL to check.
- * @returns {Promise<boolean>} - Returns a boolean indicating if the URL is valid.
+ *
+ * @param   {string}           url - The URL to check.
+ * @returns {Promise<boolean>}     - Returns a boolean indicating if the URL is valid.
  */
 export const existsURL = async ( url: string ): Promise<boolean> => {
 
@@ -58,8 +59,9 @@ export const existsURL = async ( url: string ): Promise<boolean> => {
 
 /**
  * Ensures that a URL has the 'https://' prefix.
- * @param {string} value - The URL to verify.
- * @returns {Promise<string | undefined>} - Returns the URL with the 'https://' prefix or undefined if not valid.
+ *
+ * @param   {string}                      value - The URL to verify.
+ * @returns {Promise<string | undefined>}       - Returns the URL with the 'https://' prefix or undefined if not valid.
  */
 export const validateURL = async ( value: string ): Promise<string | undefined> => {
 
@@ -73,8 +75,9 @@ export const validateURL = async ( value: string ): Promise<string | undefined> 
 
 /**
  * Checks if an image URL exists and returns the URL if valid.
- * @param {string} value - The image URL to check.
- * @returns {Promise<string | undefined>} - Returns the URL if the image exists or undefined if not.
+ *
+ * @param   {string}                      value - The image URL to check.
+ * @returns {Promise<string | undefined>}       - Returns the URL if the image exists or undefined if not.
  */
 export const validateImageURL = async ( value: string ): Promise<string | undefined> => {
 

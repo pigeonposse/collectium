@@ -30,6 +30,7 @@ export type GitHubOpts = {
 	branch?   : string
 	/**
 	 * List the IDs/patters of repositories to get
+	 *
 	 * @default
 	 * ['*'] // all repos
 	 * @example ["!.github"] // all less ".github" repo
@@ -42,11 +43,13 @@ export type GitHubOpts = {
 	 * - **true**: Active
 	 * - **false**: Desactive
 	 * - **'no-assets'**: Does not get 'assets' from releases
+	 *
 	 * @default false
 	 */
 	releases? : boolean | 'no-assets'
 	/**
 	 * Get repository content data.
+	 *
 	 * @default
 	 * {
 	 *   package: 'package.json',

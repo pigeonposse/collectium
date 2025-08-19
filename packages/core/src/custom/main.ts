@@ -18,7 +18,9 @@ export type CustomOpts = { [key in string]: {
 
 const ERROR_ID = { GET_CUSTOM: 'GET_CUSTOM' } as const
 type ErrorID = typeof ERROR_ID[keyof typeof ERROR_ID]
-
+type SchemaCustom = {
+	[key in keyof CustomOpts]: ZodAnyType
+}
 export class Custom extends CollectiumSuper<CustomOpts, ErrorID> {
 
 	schema
@@ -31,9 +33,7 @@ export class Custom extends CollectiumSuper<CustomOpts, ErrorID> {
 			ERROR_ID : ERROR_ID,
 		} )
 
-		const schema: {
-			[key in keyof CustomOpts]: ZodAnyType
-		} = {}
+		const schema: SchemaCustom = {}
 
 		for ( const key in this.opts ) {
 

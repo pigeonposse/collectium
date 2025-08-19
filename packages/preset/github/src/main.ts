@@ -15,6 +15,7 @@ export const setGithubPreset = <ID extends string = string>(
 	data: Data & {
 		/**
 		 * key ID of the reponse
+		 *
 		 * @default data.user
 		 */
 		id?         : ID
@@ -22,6 +23,7 @@ export const setGithubPreset = <ID extends string = string>(
 		 * Configuration file path(s) without extension for get repo information.
 		 *
 		 * The default value provides: [`.${this.id || this.user}.yml`,`.${{this.id || this.user}.yaml`]
+		 *
 		 * @default
 		 * [`.${this.id || this.user}`]
 		 */
@@ -38,7 +40,7 @@ export const setGithubPreset = <ID extends string = string>(
 ): CollectiumOpts => {
 
 	const {
-		id  = data.id || data.user,
+		id = data.id || data.user,
 		configPath,
 		customType,
 		hook: _hook,

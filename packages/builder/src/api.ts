@@ -17,22 +17,26 @@ export type BuildApiParams = {
 	input   : Awaited<ReturnType<typeof createApp>>
 	/**
 	 * Output dir
+	 *
 	 * @default 'build/api'
 	 */
 	output? : string
 	opts?: {
 		/**
 		 * Build openapi schema
+		 *
 		 * @default true
 		 */
 		schema? : boolean
 		/**
 		 * Build openapi Definition ts file
+		 *
 		 * @default true
 		 */
 		dts?    : boolean
 		/**
 		 * Build markdown documentation file
+		 *
 		 * @default false
 		 */
 		md?     : boolean

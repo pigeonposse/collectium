@@ -1,5 +1,6 @@
 /**
  * Vite config.
+ *
  * @description Vite config.
  * @see https://vitejs.dev/guide
  */

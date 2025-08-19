@@ -2,8 +2,9 @@ import { createAppFn } from './core'
 
 /**
  * Creates an application that retrieves and validates data.
- * @param {object} data - The data collection object.
- * @returns {object} The application with methods to access stored data.
+ *
+ * @param   {object} data - The data collection object.
+ * @returns {object}      The application with methods to access stored data.
  * @example
  * import createApp from '@collectium/api/standard'
  * const app = createApp();

@@ -1,5 +1,14 @@
 # @collectium/api
 
+## 0.3.10
+
+### Patch Changes
+
+- up deps, add updater, lint conde
+
+- Updated dependencies []:
+  - @collectium/core@0.3.10
+
 ## 0.3.9
 
 ### Patch Changes

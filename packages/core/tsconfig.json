@@ -1,9 +1,8 @@
 {
 	"compilerOptions": {
-		"target": "ES2022",
-		"module": "ESNext",
+		"target": "esnext",
+		"module": "esnext",
 		"moduleResolution": "Bundler",
-
 		/**
 		 * Options.
 		 */
@@ -13,14 +12,12 @@
 		"strictPropertyInitialization": true,
 		"noImplicitAny": true,
 		"strictNullChecks": true,
-		"sourceMap": true,
 		"resolveJsonModule": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"skipLibCheck": true,
 		"useDefineForClassFields": true,
 		// "allowImportingTsExtensions": false,
-		// "baseUrl": ".",
 		/**
 		 * Typecheck JS in `.svelte` and `.js` files by default.
 		 * Disable checkJs if you'd like to use dynamic types in JS.

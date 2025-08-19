@@ -7,12 +7,13 @@ import {
 
 /**
  * Creates an application that periodically saves and retrieves JSON data.
- * @param {object} data - The configuration object.
- * @param {object} data.opts - The options for the application.
- * @param {string} data.opts.path - Path to the file where data will be stored.
- * @param {number} [data.opts.loop=600000] - Time interval in milliseconds (default: 10 minutes).
+ *
+ * @param   {object} data                    - The configuration object.
+ * @param   {object} data.opts               - The options for the application.
+ * @param   {string} data.opts.path          - Path to the file where data will be stored.
+ * @param   {number} [data.opts.loop=600000] - Time interval in milliseconds (default: 10 minutes).
+ * @returns {object}                         The application with methods to access stored data.
  * @throws {Error} If the path is not provided.
- * @returns {object} The application with methods to access stored data.
  * @example
  * import createApp from '@collectium/api/local'
  * const app = createApp({ opts: { path: './data.json', loop: 300000 } });
@@ -24,6 +25,7 @@ export const createApp = createAppFn<{
 	path  : string
 	/**
 	 * Time loop in miliseconds
+	 *
 	 * @default 600000 // 10 mins
 	 */
 	loop? : number
@@ -45,7 +47,7 @@ export const createApp = createAppFn<{
 	loadData()
 	setInterval( loadData, loop )
 
-	return  {
+	return {
 		all : {
 			data : async () => {
 

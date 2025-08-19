@@ -16,6 +16,7 @@ export type BuildSchemaParams = {
 	input   : Collectium
 	/**
 	 * Output dir
+	 *
 	 * @default 'build/schema'
 	 */
 	output? : string

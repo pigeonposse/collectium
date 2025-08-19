@@ -13,17 +13,20 @@ import type { ZodAnyType } from '../_shared/validate'
 export type CollectiumConfig = {
 	/**
 	 * Set if console.debug is active
+	 *
 	 * @default false
 	 */
 	debug?     : boolean
 	/**
 	 * Skip method Errors
 	 * If true, the error when getting data from the method is ignored and undefined is returned
+	 *
 	 * @default false
 	 */
 	skipError? : boolean
 	/**
 	 * Skip warnings from methods
+	 *
 	 * @default false
 	 */
 	skipWarn?  : boolean
@@ -33,7 +36,7 @@ export type SchemaFn = ( zod: typeof z ) => ZodAnyType | ResponseVoid
 
 const ERROR_ID = { SCHEMA_VALIDATION: 'SCHEMA_VALIDATION' } as const
 
-export class CollectiumSuperMininal  {
+export class CollectiumSuperMininal {
 
 	/**
 	 * Wrapped Zod instance with restricted methods
@@ -56,7 +59,7 @@ export class CollectiumSuperMininal  {
 
 }
 
-export class CollectiumSuper<Opts, ErrorID extends string> extends CollectiumSuperMininal  {
+export class CollectiumSuper<Opts, ErrorID extends string> extends CollectiumSuperMininal {
 
 	/**
 	 * Controller for Fetch petitions.

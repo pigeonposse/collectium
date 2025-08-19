@@ -26,6 +26,7 @@ export type CheckOpts = CollectiumOpts | CollectiumOptsPath
  * Checker class to validate schemas against specified content files.
  * This class is designed to work with Zod schemas and supports dynamic content validation
  * from either a configuration object or a configuration file path.
+ *
  * @example
  * // Example usage with a configuration file path:
  * import { Checker } from '@collectium/check';
@@ -89,10 +90,10 @@ export class Checker {
 	}
 
 	#style = {
-		warn       : ( msg: string ) => styleText( 'yellow',  styleText( 'bold', '⚠️' ) + ' ' +  styleText( 'dim', msg ) ),
-		errorMsg   : ( k:string, msg: string ) => styleText( 'red',  styleText( 'bold', '✦ ' + k ) + ' ' + msg ),
-		info       : ( t:string, msg: string ) => styleText( 'bold',  t ) + ' ' + styleText( 'dim', msg ),
-		successMsg : ( k:string, msg: string ) => styleText( 'green',  styleText( 'bold', '✦ ' + k ) + ' ' + msg ),
+		warn       : ( msg: string ) => styleText( 'yellow', styleText( 'bold', '⚠️' ) + ' ' + styleText( 'dim', msg ) ),
+		errorMsg   : ( k:string, msg: string ) => styleText( 'red', styleText( 'bold', '✦ ' + k ) + ' ' + msg ),
+		info       : ( t:string, msg: string ) => styleText( 'bold', t ) + ' ' + styleText( 'dim', msg ),
+		successMsg : ( k:string, msg: string ) => styleText( 'green', styleText( 'bold', '✦ ' + k ) + ' ' + msg ),
 	}
 
 	async #execute( readeadFiles: Content, dir: string ) {
@@ -150,7 +151,7 @@ export class Checker {
 	async run( id: string, opts?: { cwd?: string } ) {
 
 		const dir = opts?.cwd || cwd()
-		console.log( this.#style.info( 'Path to check:', dir  ), '\n' )
+		console.log( this.#style.info( 'Path to check:', dir ), '\n' )
 
 		const readeadFiles = await this.#getContent( id )
 

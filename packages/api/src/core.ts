@@ -165,7 +165,7 @@ class AppCore<Env extends object, Opts> {
 
 }
 
-type CreateOpts =  {
+type CreateOpts = {
 	/** Collectium instance */
 	collectium : Collectium
 	/** App Options */
@@ -173,8 +173,8 @@ type CreateOpts =  {
 }
 
 export const createAppFn = <Opts = undefined>( routes: Routes<Opts>, description = `${name} API documentation` ) => (
-	data: Opts extends undefined ?
-		CreateOpts : CreateOpts & {
+	data: Opts extends undefined
+		? CreateOpts : CreateOpts & {
 			/** Options */
 			opts : Opts
 		},

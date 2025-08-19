@@ -1,16 +1,16 @@
-import * as yaml    from 'js-yaml'
-import { readFile } from 'node:fs/promises'
+import { deserialize as yamlParse } from '@structium/toml'
+import { deserialize as tomlParse } from '@structium/toml'
+import { readFile }                 from 'node:fs/promises'
 import {
 	isAbsolute,
 	join,
 } from 'node:path'
-import { parse } from 'smol-toml'
 
 export const getContent = async <Obj extends object = object>( content: string ): Promise<Obj | string> => {
 
 	try {
 
-		const getObject = ( data: string ) => {
+		const getObject = async ( data: string ) => {
 
 			try {
 
@@ -22,7 +22,7 @@ export const getContent = async <Obj extends object = object>( content: string )
 
 				try {
 
-					const r = yaml.load( data ) as Obj
+					const r = await yamlParse( data ) as Obj
 					return r
 
 				}
@@ -30,7 +30,7 @@ export const getContent = async <Obj extends object = object>( content: string )
 
 					try {
 
-						const r = parse( data ) as Obj
+						const r = await tomlParse( data ) as Obj
 						return r
 
 					}
@@ -46,7 +46,7 @@ export const getContent = async <Obj extends object = object>( content: string )
 
 		}
 
-		const res = getObject( content )
+		const res = await getObject( content )
 
 		return res ? res : content
 
@@ -112,7 +112,7 @@ export const getStringType = ( value: string ): 'text' | 'url' | 'path' => {
 
 }
 
-export const getContentFrom =  async <Obj extends object = object>( value: string  ): Promise<Obj | string> => {
+export const getContentFrom =  async <Obj extends object = object>( value: string ): Promise<Obj | string> => {
 
 	const type = getStringType( value )
 

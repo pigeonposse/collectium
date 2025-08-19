@@ -213,7 +213,7 @@ export class GitHubRepo extends GitHubSuper {
 			headers : this.opts.requestHeaders,
 		} )
 
-		return response.data.map ( d => ( {
+		return response.data.map( d => ( {
 			url         : d.html_url,
 			tag         : d.tag_name,
 			name        : d.name || String( d.id ),
@@ -411,7 +411,7 @@ export class GitHubRepo extends GitHubSuper {
 
 	}
 
-	async geFileContent( repo: string, path: string ): Promise<RepoFileContentRes>  {
+	async geFileContent( repo: string, path: string ): Promise<RepoFileContentRes> {
 
 		try {
 

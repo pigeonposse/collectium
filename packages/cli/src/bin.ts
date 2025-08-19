@@ -1,14 +1,12 @@
 #!/usr/bin/env node
-
-import {
-	run,
-	updater,
-} from '@collectium/cli'
-
 import {
 	name,
 	version,
-} from '../package.json'
+} from './const'
+import {
+	run,
+	updater,
+}  from './index'
 
 export const cli = async () => {
 
