@@ -9,6 +9,7 @@ import {
 	type Zod,
 	type ZodAnyType,
 	existsURL,
+	z,
 } from '../../_shared/validate'
 import { GitHubSuper } from '../_super/main'
 
@@ -136,7 +137,7 @@ const schema = ( z: Zod, opts: GitHubOpts ) => {
 					updatedAt   : z.string(),
 				} ) ).optional(),
 			} ) ).optional(),
-		} ) ) satisfies Zod.ZodSchema<RepoRes>,
+		} ) ) satisfies z.ZodSchema<RepoRes>,
 		content        : content,
 		fileContentRes : getFile( ).optional(),
 	}
@@ -155,7 +156,7 @@ export class GitHubRepo extends GitHubSuper {
 
 		super( opts, config )
 
-		this.schema = schema( this.z, this.opts )
+		this.schema = schema( z, this.opts )
 
 	}
 
@@ -250,7 +251,7 @@ export class GitHubRepo extends GitHubSuper {
 				const isObj  = typeof file !== 'string' && !Array.isArray( file )
 				const input  = !isObj ? file : file.input
 				const paths  = typeof input === 'string' ? [ input ] : input
-				const schema = isObj ? await file.schema?.( this.z ) : undefined
+				const schema = isObj ? await file.schema?.( z ) : undefined
 
 				for ( const path of paths ) {
 
@@ -326,7 +327,7 @@ export class GitHubRepo extends GitHubSuper {
 				const isObj  = typeof file !== 'string' && !Array.isArray( file )
 				const input  = !isObj ? file : file.input
 				const paths  = typeof input === 'string' ? [ input ] : input
-				const schema = isObj ? ( await file.schema?.( this.z ) || undefined ) : undefined
+				const schema = isObj ? ( await file.schema?.( z ) || undefined ) : undefined
 
 				for ( const path of paths ) {
 

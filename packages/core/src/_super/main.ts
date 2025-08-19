@@ -2,13 +2,15 @@ import {
 	catchError,
 	TypedError,
 } from '../_shared/error'
-import { z } from '../_shared/validate'
 
 import type {
 	CreateUppercaseKeyValueObject,
 	ResponseVoid,
 } from '../_shared/types'
-import type { ZodAnyType } from '../_shared/validate'
+import type {
+	ZodAnyType,
+	Zod,
+} from '../_shared/validate'
 
 export type CollectiumConfig = {
 	/**
@@ -32,16 +34,11 @@ export type CollectiumConfig = {
 	skipWarn?  : boolean
 }
 
-export type SchemaFn = ( zod: typeof z ) => ZodAnyType | ResponseVoid
+export type SchemaFn = ( zod: Zod ) => ZodAnyType | ResponseVoid
 
 const ERROR_ID = { SCHEMA_VALIDATION: 'SCHEMA_VALIDATION' } as const
 
 export class CollectiumSuperMininal {
-
-	/**
-	 * Wrapped Zod instance with restricted methods
-	 */
-	protected z : typeof z = z
 
 	/**
 	 * Confugration

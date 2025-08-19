@@ -1,8 +1,11 @@
 /* eslint-disable camelcase */
 // import { z } from 'zod'
 
-import { getContent }  from '../../_shared/string'
-import { validateURL } from '../../_shared/validate'
+import { getContent } from '../../_shared/string'
+import {
+	validateURL,
+	z,
+} from '../../_shared/validate'
 import { GitHubSuper } from '../_super/main'
 
 import type { ZodInfer } from '../../_shared/validate'
@@ -44,35 +47,35 @@ type FundingGH = {
 }
 export class GitHubUser extends GitHubSuper {
 
-	schema = { res : this.z.object( {
-		id          : this.z.string(),
-		avatar      : this.z.string(),
-		publicRepos : this.z.number(),
-		followers   : this.z.number(),
-		blog        : this.z.string().optional(),
-		email       : this.z.string().optional(),
-		name        : this.z.string().optional(),
-		description : this.z.string().optional(),
-		social      : this.z.array( this.z.object( {
-			provider : this.z.enum( SOCIAL as [Social] ),
-			url      : this.z.string(),
+	schema = { res : z.object( {
+		id          : z.string(),
+		avatar      : z.string(),
+		publicRepos : z.number(),
+		followers   : z.number(),
+		blog        : z.string().optional(),
+		email       : z.string().optional(),
+		name        : z.string().optional(),
+		description : z.string().optional(),
+		social      : z.array( z.object( {
+			provider : z.enum( SOCIAL as [Social] ),
+			url      : z.string(),
 		} ) ).optional(),
-		funding : this.z.array( this.z.object( {
-			provider : this.z.enum( FUNDING as [Funding] ),
-			url      : this.z.string(),
+		funding : z.array( z.object( {
+			provider : z.enum( FUNDING as [Funding] ),
+			url      : z.string(),
 		} ) ).optional(),
-		teams : this.z.array( this.z.object( {
-			name    : this.z.string(),
-			slug    : this.z.string(),
-			desc    : this.z.string().optional(),
-			members : this.z.array( this.z.object( {
-				login    : this.z.string(),
-				avatar   : this.z.string(),
-				github   : this.z.string(),
-				homepage : this.z.string(),
-				name     : this.z.string().optional(),
-				desc     : this.z.string().optional(),
-				location : this.z.string().optional(),
+		teams : z.array( z.object( {
+			name    : z.string(),
+			slug    : z.string(),
+			desc    : z.string().optional(),
+			members : z.array( z.object( {
+				login    : z.string(),
+				avatar   : z.string(),
+				github   : z.string(),
+				homepage : z.string(),
+				name     : z.string().optional(),
+				desc     : z.string().optional(),
+				location : z.string().optional(),
 			} ) ),
 		} ) ).optional(),
 	} ) }

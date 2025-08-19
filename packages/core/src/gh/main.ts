@@ -2,8 +2,8 @@ import { CollectiumSuper } from '../_super/main'
 import { Sort }            from './filter/main'
 import { GitHubRepo }      from './repo/main'
 import { GitHubUser }      from './user/main'
+import { z }               from '../_shared/validate'
 
-import type { z }                             from '../_shared/validate'
 import type { GitHubOpts as GitHubOptsValue } from './_super/types'
 
 export type GitHubOpts = {
@@ -49,22 +49,22 @@ export class GitHub extends CollectiumSuper<GitHubOpts, string> {
 		const first = this.#part[Object.keys( this.#part )[0]]
 		this.schema = {
 			content : first.repo.schema.content,
-			res     : this.z.object( {
-				data : this.z.record(
-					this.z.string(),
-					this.z.object( {
+			res     : z.object( {
+				data : z.record(
+					z.string(),
+					z.object( {
 						repo : first.repo.schema.res.optional(),
 						user : first.user.schema.res.optional(),
 					} ),
 				),
-				rate : this.z.union( [
-					this.z.object( {
-						limit     : this.z.number(),
-						remaining : this.z.number(),
-						reset     : this.z.number(),
-						used      : this.z.number(),
+				rate : z.union( [
+					z.object( {
+						limit     : z.number(),
+						remaining : z.number(),
+						reset     : z.number(),
+						used      : z.number(),
 					} ),
-					this.z.literal( false ),
+					z.literal( false ),
 				] ),
 			} ),
 		}

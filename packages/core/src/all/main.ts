@@ -1,5 +1,6 @@
 
 import { objectMap }      from '../_shared/obj'
+import { z }              from '../_shared/validate'
 import {
 	CollectiumSuperMininal,
 	type CollectiumConfig,
@@ -80,10 +81,10 @@ export class Collectium extends CollectiumSuperMininal {
 		this.github = new GitHub( this.opts.github || {}, this.opts.config )
 		this.custom = new Custom( this.opts.custom || {}, this.opts.config )
 
-		this.schema = { res : this.z.object( {
+		this.schema = { res : z.object( {
 			github  : this.github.schema.res.optional(),
 			custom  : this.custom.schema.res.optional(),
-			timeout : this.z.number().describe( 'time in miliseconds' ),
+			timeout : z.number().describe( 'time in miliseconds' ),
 		} ) }
 
 		if ( this.config?.debug ) console.dir( {

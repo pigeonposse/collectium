@@ -1,11 +1,14 @@
 
-import { catchError }      from '../_shared/error'
-import { getContent }      from '../_shared/string'
+import { catchError } from '../_shared/error'
+import { getContent } from '../_shared/string'
+import {
+	z,
+	type ZodAnyType,
+} from '../_shared/validate'
 import { CollectiumSuper } from '../_super/main'
 
-import type { Response }   from '../_shared/types'
-import type { ZodAnyType } from '../_shared/validate'
-import type { SchemaFn }   from '../_super/main'
+import type { Response } from '../_shared/types'
+import type { SchemaFn } from '../_super/main'
 
 type CustomContent = string | object
 
@@ -35,13 +38,9 @@ export class Custom extends CollectiumSuper<CustomOpts, ErrorID> {
 
 		const schema: SchemaCustom = {}
 
-		for ( const key in this.opts ) {
+		for ( const key in this.opts ) schema[key] = this.opts[key].schema?.( z ) || z.any()
 
-			schema[key] = this.opts[key].schema?.( this.z ) || this.z.any()
-
-		}
-
-		this.schema = { res: this.z.object( schema ) }
+		this.schema = { res: z.object( schema ) }
 
 	}
 
@@ -60,7 +59,7 @@ export class Custom extends CollectiumSuper<CustomOpts, ErrorID> {
 			const onRes = await opt.on?.( data )
 			if ( onRes ) data = onRes
 
-			const schema = opt.schema?.( this.z )
+			const schema = opt.schema?.( z )
 			if ( schema ) res[key] = await this.validateSchema( schema, data )
 			else res[key] = data
 
